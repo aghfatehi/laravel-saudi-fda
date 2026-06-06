@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="SaudiFda Test Suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
+        <env name="SFDA_CONSUMER_KEY" value="test-consumer-key"/>
+        <env name="SFDA_CONSUMER_SECRET" value="test-consumer-secret"/>
+    </php>
+</phpunit>

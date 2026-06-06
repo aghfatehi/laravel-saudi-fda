@@ -1,0 +1,1448 @@
+{
+	"info": {
+		"name": "SFDA - الهيئة العامة للغذاء والدواء السعودية",
+		"description": "# SFDA API Collection\n\n## الهيئة العامة للغذاء والدواء السعودية\n\nA comprehensive Postman collection for the Saudi Food and Drug Authority (SFDA) public APIs.\n\n## 🔑 Authentication\n\nThis collection uses **OAuth2 Client Credentials** (Basic Auth) to obtain an access token.\nThe token is automatically fetched via the **Pre-request Script** and stored as `{{\"{{access_token}}\"}}`.\n\n## 📋 Available Services\n\n| Service | Base URL |\n|---------|----------|\n| 🔐 OAuth | `https://apis.sfda.gov.sa:9002/v2/oauth` |\n| 💄 Cosmetics | `https://apis.sfda.gov.sa:9002/v2/cosmetics` |\n| 💊 Drugs | `https://apis.sfda.gov.sa:9002/v2/DMS` |\n| 🍽️ Food | `https://apis.sfda.gov.sa:9002/v2/Food` |\n| 🏥 Medical Devices | `https://apis.sfda.gov.sa:9002/v2/dwh-md` |\n\n## ⚙️ Setup\n\n1. Click **Environment** → **Add**\n2. Set `consumer_key` and `consumer_secret` variables\n3. The pre-request script will auto-fetch the access token\n\n## 🔗 Related Packages\n\n- **Laravel Package:** `aghfatehi/laravel-saudi-fda`\n- **GitHub:** https://github.com/aghfatehi/laravel-saudi-fda\n\n---\n*Collection generated from SFDA OpenAPI specifications.*",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "sfda-integration"
+	},
+	"item": [
+		{
+			"name": "🔐 Authentication",
+			"description": "OAuth2 Client Credentials - Get access token to consume SFDA APIs.\n\n**Grant Type:** `client_credentials`\n**Auth:** Basic (Consumer Key : Consumer Secret)\n**Token Expiry:** 24 hours (86400 seconds)",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var json = pm.response.json();",
+									"    pm.collectionVariables.set('access_token', json.access_token);",
+									"    pm.collectionVariables.set('token_type', json.token_type);",
+									"    ",
+									"    var expiresIn = parseInt(json.expires_in) || 86400;",
+									"    var expiresDate = new Date(Date.now() + (expiresIn * 1000));",
+									"    pm.collectionVariables.set('token_expires_at', expiresDate.toISOString());",
+									"    ",
+									"    pm.test('Access token obtained successfully', function () {",
+									"        pm.expect(json.access_token).to.not.be.empty;",
+									"    });",
+									"} else {",
+									"    pm.test('Failed to obtain access token', function () {",
+									"        pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/oauth/accesstoken",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"oauth",
+								"accesstoken"
+							]
+						},
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{consumer_key}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{consumer_secret}}",
+									"type": "string"
+								}
+							]
+						},
+						"description": "Obtain an access token using OAuth2 Client Credentials grant.\n\nThe Consumer Key and Consumer Secret are sent as HTTP Basic Authentication header.\n\nThe token expires in 24 hours and is automatically stored in the `access_token` collection variable."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"access_token\": \"eyJ4NXQiOiJORFZpTmpZeE5ERXhOV0UzTmpjM09Ea3hPVGN5TlRZ...\",\n    \"token_type\": \"Bearer\",\n    \"issued_at\": \"1717660800000\",\n    \"expires_in\": \"86400\"\n}"
+						},
+						{
+							"name": "Unauthorized",
+							"status": "Unauthorized",
+							"code": 401,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"code\": 401,\n    \"message\": \"Unauthorized\"\n}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// =============================================",
+							"// SFDA Auto-Authentication Pre-request Script",
+							"// =============================================",
+							"",
+							"var token = pm.collectionVariables.get('access_token');",
+							"var expiresAt = pm.collectionVariables.get('token_expires_at');",
+							"",
+							"// Check if we need a new token",
+							"var needsToken = !token || !expiresAt || new Date(expiresAt) <= new Date();",
+							"",
+							"if (needsToken) {",
+							"    var consumerKey = pm.collectionVariables.get('consumer_key') || pm.environment.get('consumer_key');",
+							"    var consumerSecret = pm.collectionVariables.get('consumer_secret') || pm.environment.get('consumer_secret');",
+							"    ",
+							"    if (!consumerKey || !consumerSecret) {",
+							"        console.error('SFDA: consumer_key and consumer_secret must be set in collection variables or environment.');",
+							"        return;",
+							"    }",
+							"    ",
+							"    var authHeader = 'Basic ' + btoa(consumerKey + ':' + consumerSecret);",
+							"    ",
+							"    var authRequest = {",
+							"        url: 'https://apis.sfda.gov.sa:9002/v2/oauth/accesstoken',",
+							"        method: 'POST',",
+							"        header: {",
+							"            'Content-Type': 'application/x-www-form-urlencoded',",
+							"            'Authorization': authHeader",
+							"        },",
+							"        body: {",
+							"            mode: 'urlencoded',",
+							"            urlencoded: [",
+							"                { key: 'grant_type', value: 'client_credentials' }",
+							"            ]",
+							"        }",
+							"    };",
+							"    ",
+							"    pm.sendRequest(authRequest, function (err, res) {",
+							"        if (err) {",
+							"            console.error('SFDA Auth Error:', err);",
+							"            return;",
+							"        }",
+							"        ",
+							"        if (res.code === 200) {",
+							"            var json = res.json();",
+							"            pm.collectionVariables.set('access_token', json.access_token);",
+							"            ",
+							"            var expiresIn = parseInt(json.expires_in) || 86400;",
+							"            var expiresDate = new Date(Date.now() + (expiresIn * 1000));",
+							"            pm.collectionVariables.set('token_expires_at', expiresDate.toISOString());",
+							"        }",
+							"    });",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			]
+		},
+		{
+			"name": "💄 Cosmetics Products",
+			"description": "Registered cosmetics products APIs.\n\n**Base URL:** `https://apis.sfda.gov.sa:9002/v2/cosmetics`\n\n**Endpoints:**\n- `GET /list` - List all cosmetics (paginated)\n- `GET /Product_Id/{id}` - Get cosmetic by Product ID\n- `GET /cosmeticNumber/{number}` - Get cosmetic by Cosmetic Number\n- `GET /BarCode/{barcode}` - Get cosmetic by Barcode\n- `GET /search` - Advanced search with filters\n- `GET /search/{keyword}/{page}` - Search by keyword\n- `GET /image/{image_code}` - Get product image",
+			"item": [
+				{
+					"name": "📋 List Cosmetics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has data with pagination', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('data');",
+									"    pm.expect(json.data).to.have.property('currentPage');",
+									"    pm.expect(json.data).to.have.property('pageCount');",
+									"    pm.expect(json.data).to.have.property('results');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/list?page=1&Keyword=",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number (default: 1)"
+								},
+								{
+									"key": "Keyword",
+									"value": "",
+									"description": "Optional keyword filter"
+								}
+							]
+						},
+						"description": "Get a paginated list of all registered cosmetic products.\n\n**Parameters:**\n- `page` (query, optional): Page number, defaults to 1\n- `Keyword` (query, optional): Filter by keyword"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"code\": 200,\n    \"name\": \"OK\",\n    \"data\": {\n        \"results\": [\n            {\n                \"product_Id\": 1492,\n                \"cosmeticNumber\": \"CN-2023-08200\",\n                \"accountName\": \"Medical and Pharmaceutical Services Co\",\n                \"brandName\": \"كوريكشن\",\n                \"specificName\": \"Correction, Whitening Body Lotion\",\n                \"mainCategoryEn\": \"Skin products\",\n                \"expiryDate\": \"2025-12-27T08:42:38\",\n                \"isActive\": true,\n                \"isApproved\": true,\n                \"status\": \"Active\"\n            }\n        ],\n        \"currentPage\": 1,\n        \"pageCount\": 422,\n        \"pageSize\": 10,\n        \"rowCount\": 4219\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "🔍 Get Cosmetic by Product ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/Product_Id/1495",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"Product_Id",
+								"1495"
+							],
+							"variable": [
+								{
+									"key": "product_id",
+									"value": "1495",
+									"description": "Cosmetic Product ID"
+								}
+							]
+						},
+						"description": "Get a specific cosmetic product by its Product ID.\n\n**Path Parameters:**\n- `Product_Id` (required): Numeric product ID"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"code\": 200,\n    \"name\": \"OK\",\n    \"data\": {\n        \"product_Id\": 1495,\n        \"cosmeticNumber\": \"CN-2023-08203\",\n        \"accountName\": \"AVON BEAUTY ARABIA LLC\",\n        \"brandName\": \"AVON CALMING EFFECTS\",\n        \"specificName\": \"AVON CALMING EFFECTS POWDER FOUNDATION - NUDE\",\n        \"mainCategoryEn\": \"Skin products\",\n        \"firstSubCategoryEn\": \"Make-up products\",\n        \"secondSubCategoryEn\": \"Other face make-up products\",\n        \"expiryDate\": \"2026-04-26T08:42:16\",\n        \"isActive\": true,\n        \"isApproved\": true,\n        \"status\": \"Active\",\n        \"productType\": \"Simple\",\n        \"variantNumber\": \"COV-2023-6164\",\n        \"barCode\": \"0\",\n        \"packageVolume\": 200,\n        \"volumeUnitEn\": \"MILLILITER\",\n        \"manufacturerNameEn\": \"LOreal Procasa\",\n        \"manufacturerCountryEn\": \"Spain\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "🔍 Get Cosmetic by Cosmetic Number",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/cosmeticNumber/CN-2023-08203",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"cosmeticNumber",
+								"CN-2023-08203"
+							],
+							"variable": [
+								{
+									"key": "cosmetic_number",
+									"value": "CN-2023-08203",
+									"description": "Cosmetic Number"
+								}
+							]
+						},
+						"description": "Get a specific cosmetic product by its Cosmetic Number.\n\n**Path Parameters:**\n- `CosmeticNumber` (required): Cosmetic registration number"
+					}
+				},
+				{
+					"name": "🔍 Get Cosmetic by Barcode",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/BarCode/6281007990215",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"BarCode",
+								"6281007990215"
+							],
+							"variable": [
+								{
+									"key": "barcode",
+									"value": "6281007990215",
+									"description": "Product barcode"
+								}
+							]
+						},
+						"description": "Get a specific cosmetic product by its barcode.\n\n**Path Parameters:**\n- `BarCode` (required): Product barcode"
+					}
+				},
+				{
+					"name": "🔎 Advanced Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/search?SpecificNameAr=&SpecificName=&BrandName=AVON&barCode=&CosmeticNumber=&page=1",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"search"
+							],
+							"query": [
+								{
+									"key": "SpecificNameAr",
+									"value": "",
+									"description": "Arabic specific name"
+								},
+								{
+									"key": "SpecificName",
+									"value": "",
+									"description": "English specific name"
+								},
+								{
+									"key": "BrandName",
+									"value": "AVON",
+									"description": "Brand name filter"
+								},
+								{
+									"key": "barCode",
+									"value": "",
+									"description": "Barcode filter"
+								},
+								{
+									"key": "CosmeticNumber",
+									"value": "",
+									"description": "Cosmetic number filter"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								}
+							]
+						},
+						"description": "Advanced search for cosmetic products using multiple filters.\n\n**Parameters:**\n- `SpecificNameAr` (query, optional): Arabic name\n- `SpecificName` (query, optional): English name\n- `BrandName` (query, optional): Brand name\n- `barCode` (query, optional): Barcode\n- `CosmeticNumber` (query, optional): Cosmetic number\n- `page` (query, optional): Page number (default: 1)"
+					}
+				},
+				{
+					"name": "🔎 Search by Keyword",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/search/AVON/1",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"search",
+								"AVON",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "keyword",
+									"value": "AVON",
+									"description": "Search keyword"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								}
+							]
+						},
+						"description": "Search for cosmetic products by keyword with pagination.\n\n**Path Parameters:**\n- `keyword` (required): Search keyword\n- `page` (required): Page number"
+					}
+				},
+				{
+					"name": "🖼️ Get Cosmetic Image",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/cosmetics/image/IMG-2023-12345",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"cosmetics",
+								"image",
+								"IMG-2023-12345"
+							],
+							"variable": [
+								{
+									"key": "image_code",
+									"value": "IMG-2023-12345",
+									"description": "Image code/name"
+								}
+							]
+						},
+						"description": "Get a product image by its image code.\n\n**Path Parameters:**\n- `image_code` (required): Image name/code"
+					}
+				}
+			]
+		},
+		{
+			"name": "💊 Drug Products",
+			"description": "Registered drug products APIs.\n\n**Base URL:** `https://apis.sfda.gov.sa:9002/v2/DMS`\n\n**Endpoints:**\n- `GET /drug/list` - List all registered drugs (paginated)",
+			"item": [
+				{
+					"name": "📋 List Drugs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has pagination metadata', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('data');",
+									"    if (json.data && Array.isArray(json.data)) {",
+									"        pm.expect(json).to.have.property('currentPage');",
+									"        pm.expect(json).to.have.property('pageCount');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/DMS/drug/list?page=1",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"DMS",
+								"drug",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number (default: 1)"
+								}
+							]
+						},
+						"description": "Get a paginated list of all registered drug products.\n\n**Parameters:**\n- `page` (query, optional): Page number, defaults to 1"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"code\": 200,\n    \"name\": \"OK\",\n    \"data\": [\n        {\n            \"registerNumber\": \"21-37-10\",\n            \"tradeName\": \"ORELOX 100MG TABLETS\",\n            \"scientificName\": \"CEFPODOXIME\",\n            \"atcCode1\": \"J01DD14\",\n            \"packageSize\": 10,\n            \"strength\": \"100\",\n            \"shelfLife\": 36,\n            \"price\": \"30.8\",\n            \"pharmaceuticalForm\": {\n                \"nameEn\": \"Tablet\"\n            },\n            \"marketingStatus\": {\n                \"nameEn\": \"Marketed\"\n            },\n            \"legalStatus\": {\n                \"nameEn\": \"Prescription\"\n            },\n            \"company\": {\n                \"nameEn\": \"SANOFI WINTHROP INDUSTRIE\"\n            }\n        }\n    ],\n    \"currentPage\": 2,\n    \"pageCount\": 791,\n    \"pageSize\": 15,\n    \"rowCount\": 11856\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "🍽️ Food Products",
+			"description": "Registered food products APIs.\n\n**Base URL:** `https://apis.sfda.gov.sa:9002/v2/Food`\n\n**Endpoints:**\n- `GET /product/list/{page}` - List all food products\n- `GET /product/id/{id}` - Get food product by ID\n- `GET /product/referencenumber/{ref}` - Get by reference number\n- `GET /product/barcode/{barcode}` - Get by barcode\n- `GET /product/search/{keyword}/{page}` - Search by keyword\n- `GET /image/{image_code}` - Get product image",
+			"item": [
+				{
+					"name": "📋 List Food Products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has data array', function () {",
+									"    var json = pm.response.json();",
+									"    pm.expect(json).to.have.property('data');",
+									"    pm.expect(json).to.have.property('metadata');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/product/list/1",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"product",
+								"list",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								}
+							]
+						},
+						"description": "Get a paginated list of all registered food products.\n\n**Path Parameters:**\n- `page` (required): Page number"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"code\": 200,\n    \"name\": \"OK\",\n    \"data\": [\n        {\n            \"id\": 1449070,\n            \"referanceNumber\": \"P-3-N-200621-107719\",\n            \"arStatus\": \"مسجل\",\n            \"enStatus\": \"Registered\",\n            \"barCode\": \"50254156\",\n            \"brandName\": \"Dr.Oetker\",\n            \"tradeName\": \"Dr.Oetker\",\n            \"hsCode\": \"18040000\",\n            \"itemWeight\": 100,\n            \"unitNameAr\": \"جرام\",\n            \"unitNameEn\": \"gm\",\n            \"enCOO\": \"United Kingdom\",\n            \"enPackingType\": \"Plastic bag\",\n            \"shelfTimeEn\": \"18 months\",\n            \"companyName\": \"Dr.Oetker\",\n            \"enFoodGroup\": \"Cocoa & sweet confectionary\"\n        }\n    ],\n    \"metadata\": {\n        \"currentPage\": 1,\n        \"pageCount\": 121723,\n        \"pageSize\": 10,\n        \"rowCount\": 1217226\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "🔍 Get Food Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/product/id/1449070",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"product",
+								"id",
+								"1449070"
+							],
+							"variable": [
+								{
+									"key": "productid",
+									"value": "1449070",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Get a specific food product by its ID.\n\n**Path Parameters:**\n- `productid` (required): Numeric product ID"
+					}
+				},
+				{
+					"name": "🔍 Get Food Product by Reference Number",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/product/referencenumber/P-3-N-200621-107719",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"product",
+								"referencenumber",
+								"P-3-N-200621-107719"
+							],
+							"variable": [
+								{
+									"key": "referencenumber",
+									"value": "P-3-N-200621-107719",
+									"description": "Reference number"
+								}
+							]
+						},
+						"description": "Get a specific food product by its reference number.\n\n**Path Parameters:**\n- `referencenumber` (required): Reference number"
+					}
+				},
+				{
+					"name": "🔍 Get Food Product by Barcode",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/product/barcode/50254156",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"product",
+								"barcode",
+								"50254156"
+							],
+							"variable": [
+								{
+									"key": "barcode",
+									"value": "50254156",
+									"description": "Barcode"
+								}
+							]
+						},
+						"description": "Get a specific food product by its barcode.\n\n**Path Parameters:**\n- `barcode` (required): Product barcode (digits only)"
+					}
+				},
+				{
+					"name": "🔎 Search Food Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/product/search/chocolate/1",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"product",
+								"search",
+								"chocolate",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "keyword",
+									"value": "chocolate",
+									"description": "Search keyword"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								}
+							]
+						},
+						"description": "Search for food products by keyword with pagination.\n\n**Path Parameters:**\n- `keyword` (required): Search keyword/text\n- `page` (required): Page number"
+					}
+				},
+				{
+					"name": "🖼️ Get Food Product Image",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "https://apis.sfda.gov.sa:9002/v2/Food/image/FOOD-IMG-12345",
+							"protocol": "https",
+							"host": [
+								"apis",
+								"sfda",
+								"gov",
+								"sa"
+							],
+							"port": "9002",
+							"path": [
+								"v2",
+								"Food",
+								"image",
+								"FOOD-IMG-12345"
+							],
+							"variable": [
+								{
+									"key": "image_code",
+									"value": "FOOD-IMG-12345",
+									"description": "Image code/name"
+								}
+							]
+						},
+						"description": "Get a food product image by its image code.\n\n**Path Parameters:**\n- `image_code` (required): Image name/code"
+					}
+				}
+			]
+		},
+		{
+			"name": "🏥 Medical Devices",
+			"description": "Registered medical device products APIs.\n\n**Base URL:** `https://apis.sfda.gov.sa:9002/v2/dwh-md`\n\n**Categories:**\n- **Low Risk** - Low-risk medical devices\n- **GHTF** - Global Harmonization Task Force devices\n- **TFA** - Traditional Foreign Approval devices",
+			"item": [
+				{
+					"name": "🟢 Low Risk",
+					"description": "Low-risk medical device products.\n\n**Endpoints:**\n- `GET /Lowrisk/list/{page}` - List Low Risk devices\n- `GET /Lowrisk/Product` - Get specific Low Risk product by filters\n- `GET /Lowrisk/search/{keyword}/{page}` - Search Low Risk devices",
+					"item": [
+						{
+							"name": "📋 List Low Risk Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/Lowrisk/list/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"Lowrisk",
+										"list",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Get a paginated list of low-risk medical devices.\n\n**Path Parameters:**\n- `page` (required): Page number"
+							}
+						},
+						{
+							"name": "🔍 Get Low Risk Product",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/Lowrisk/Product?LowRiskID=&productID=&AccountNumber=&RegistrationNumber=&CrNumber=",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"Lowrisk",
+										"Product"
+									],
+									"query": [
+										{
+											"key": "LowRiskID",
+											"value": "",
+											"description": "Low Risk ID filter"
+										},
+										{
+											"key": "productID",
+											"value": "",
+											"description": "Product ID filter"
+										},
+										{
+											"key": "AccountNumber",
+											"value": "",
+											"description": "Account number filter"
+										},
+										{
+											"key": "RegistrationNumber",
+											"value": "",
+											"description": "Registration number filter"
+										},
+										{
+											"key": "CrNumber",
+											"value": "",
+											"description": "CR number filter"
+										}
+									]
+								},
+								"description": "Get a specific Low Risk medical device product using one or more filters.\n\n**Query Parameters (at least one required):**\n- `LowRiskID` - Low Risk ID\n- `productID` - Product ID\n- `AccountNumber` - Account number\n- `RegistrationNumber` - Registration number\n- `CrNumber` - Commercial Registration number"
+							}
+						},
+						{
+							"name": "🔎 Search Low Risk Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/Lowrisk/search/face mask/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"Lowrisk",
+										"search",
+										"face mask",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "keyword",
+											"value": "face mask",
+											"description": "Search keyword"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Search low-risk medical devices by keyword.\n\n**Path Parameters:**\n- `keyword` (required): Search keyword\n- `page` (required): Page number"
+							}
+						}
+					]
+				},
+				{
+					"name": "🔵 GHTF",
+					"description": "GHTF (Global Harmonization Task Force) medical device products.\n\n**Endpoints:**\n- `GET /GHTF/list/{page}` - List GHTF devices\n- `GET /GHTF/Product` - Get specific GHTF product\n- `GET /GHTF/Accessory/id/{id}` - Get GHTF accessory\n- `GET /GHTF/search/{keyword}/{page}` - Search GHTF devices",
+					"item": [
+						{
+							"name": "📋 List GHTF Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/GHTF/list/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"GHTF",
+										"list",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Get a paginated list of GHTF medical devices.\n\n**Path Parameters:**\n- `page` (required): Page number"
+							}
+						},
+						{
+							"name": "🔍 Get GHTF Product",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/GHTF/Product?PropertiesId=&MDId=&ReferenceNumber=&AccountNumber=&DeviceNumber=&CrNumber=",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"GHTF",
+										"Product"
+									],
+									"query": [
+										{
+											"key": "PropertiesId",
+											"value": "",
+											"description": "Properties ID filter"
+										},
+										{
+											"key": "MDId",
+											"value": "",
+											"description": "Medical Device ID filter"
+										},
+										{
+											"key": "ReferenceNumber",
+											"value": "",
+											"description": "Reference number filter"
+										},
+										{
+											"key": "AccountNumber",
+											"value": "",
+											"description": "Account number filter"
+										},
+										{
+											"key": "DeviceNumber",
+											"value": "",
+											"description": "Device number filter"
+										},
+										{
+											"key": "CrNumber",
+											"value": "",
+											"description": "CR number filter"
+										}
+									]
+								},
+								"description": "Get a specific GHTF medical device product using one or more filters.\n\n**Query Parameters (at least one required):**\n- `PropertiesId` - Properties ID\n- `MDId` - Medical Device ID\n- `ReferenceNumber` - Reference number\n- `AccountNumber` - Account number\n- `DeviceNumber` - Device number\n- `CrNumber` - Commercial Registration number"
+							}
+						},
+						{
+							"name": "🔗 Get GHTF Accessory",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/GHTF/Accessory/id/11",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"GHTF",
+										"Accessory",
+										"id",
+										"11"
+									],
+									"variable": [
+										{
+											"key": "PropertiesId",
+											"value": "11",
+											"description": "Properties ID"
+										}
+									]
+								},
+								"description": "Get a specific GHTF accessory by its Properties ID.\n\n**Path Parameters:**\n- `PropertiesId` (required): Properties ID"
+							}
+						},
+						{
+							"name": "🔎 Search GHTF Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/GHTF/search/hospital bed/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"GHTF",
+										"search",
+										"hospital bed",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "keyword",
+											"value": "hospital bed",
+											"description": "Search keyword"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Search GHTF medical devices by keyword.\n\n**Path Parameters:**\n- `keyword` (required): Search keyword\n- `page` (required): Page number"
+							}
+						}
+					]
+				},
+				{
+					"name": "🟣 TFA",
+					"description": "TFA (Traditional Foreign Approval) medical device products.\n\n**Endpoints:**\n- `GET /TFA/list/{page}` - List TFA devices\n- `GET /TFA/Accessory/id/{id}` - Get TFA accessory\n- `GET /TFA/search/{keyword}/{page}` - Search TFA devices",
+					"item": [
+						{
+							"name": "📋 List TFA Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/TFA/list/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"TFA",
+										"list",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Get a paginated list of TFA medical devices.\n\n**Path Parameters:**\n- `page` (required): Page number"
+							}
+						},
+						{
+							"name": "🔗 Get TFA Accessory",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/TFA/Accessory/id/11",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"TFA",
+										"Accessory",
+										"id",
+										"11"
+									],
+									"variable": [
+										{
+											"key": "PropertiesId",
+											"value": "11",
+											"description": "Properties ID"
+										}
+									]
+								},
+								"description": "Get a specific TFA accessory by its Properties ID.\n\n**Path Parameters:**\n- `PropertiesId` (required): Properties ID"
+							}
+						},
+						{
+							"name": "🔎 Search TFA Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									}
+								],
+								"url": {
+									"raw": "https://apis.sfda.gov.sa:9002/v2/dwh-md/TFA/search/ultrasound/1",
+									"protocol": "https",
+									"host": [
+										"apis",
+										"sfda",
+										"gov",
+										"sa"
+									],
+									"port": "9002",
+									"path": [
+										"v2",
+										"dwh-md",
+										"TFA",
+										"search",
+										"ultrasound",
+										"1"
+									],
+									"variable": [
+										{
+											"key": "keyword",
+											"value": "ultrasound",
+											"description": "Search keyword"
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Page number"
+										}
+									]
+								},
+								"description": "Search TFA medical devices by keyword.\n\n**Path Parameters:**\n- `keyword` (required): Search keyword\n- `page` (required): Page number"
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token_type",
+			"value": "Bearer",
+			"type": "string"
+		},
+		{
+			"key": "token_expires_at",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "consumer_key",
+			"value": "EjmCbK5sQlL6Ha8DvDhlZBQyjXmBsRywcIX5t6OoFY2Q0teY",
+			"type": "string"
+		},
+		{
+			"key": "consumer_secret",
+			"value": "DAoQ27GAh5qTmObB5nGzmQ8e7AXQWHgn3IP17aoUDHWHoZss6jG9Dy5ZWSRXGm72",
+			"type": "string"
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"exec": [
+					"// =============================================",
+					"// SFDA Auto-Authentication Pre-request Script",
+					"// Runs before every request in the collection",
+					"// =============================================",
+					"",
+					"// Skip auth for the token endpoint itself",
+					"if (pm.request.url.toString().includes('/oauth/accesstoken')) {",
+					"    return;",
+					"}",
+					"",
+					"var token = pm.collectionVariables.get('access_token');",
+					"var expiresAt = pm.collectionVariables.get('token_expires_at');",
+					"",
+					"// Check if we need a new token",
+					"var needsToken = !token || !expiresAt || new Date(expiresAt) <= new Date();",
+					"",
+					"if (needsToken) {",
+					"    var consumerKey = pm.collectionVariables.get('consumer_key');",
+					"    var consumerSecret = pm.collectionVariables.get('consumer_secret');",
+					"    ",
+					"    if (!consumerKey || !consumerSecret) {",
+					"        console.warn('SFDA: consumer_key and consumer_secret must be set in collection variables.');",
+					"        return;",
+					"    }",
+					"    ",
+					"    var authHeader = 'Basic ' + btoa(consumerKey + ':' + consumerSecret);",
+					"    ",
+					"    var authRequest = {",
+					"        url: 'https://apis.sfda.gov.sa:9002/v2/oauth/accesstoken',",
+					"        method: 'POST',",
+					"        header: {",
+					"            'Content-Type': 'application/x-www-form-urlencoded',",
+					"            'Authorization': authHeader",
+					"        },",
+					"        body: {",
+					"            mode: 'urlencoded',",
+					"            urlencoded: [",
+					"                { key: 'grant_type', value: 'client_credentials' }",
+					"            ]",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(authRequest, function (err, res) {",
+					"        if (err) {",
+					"            console.error('SFDA Auth Error:', err);",
+					"            return;",
+					"        }",
+					"        ",
+					"        if (res.code === 200) {",
+					"            var json = res.json();",
+					"            pm.collectionVariables.set('access_token', json.access_token);",
+					"            ",
+					"            var expiresIn = parseInt(json.expires_in) || 86400;",
+					"            var expiresDate = new Date(Date.now() + (expiresIn * 1000));",
+					"            pm.collectionVariables.set('token_expires_at', expiresDate.toISOString());",
+					"            console.log('SFDA: Token refreshed successfully');",
+					"        }",
+					"    });",
+					"}"
+				],
+				"type": "text/javascript"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"exec": [
+					"// Global test script - runs after every request",
+					"if (pm.response.code === 401) {",
+					"    // Clear expired token to force refresh on next request",
+					"    pm.collectionVariables.set('access_token', '');",
+					"    pm.collectionVariables.set('token_expires_at', '');",
+					"    console.warn('SFDA: Token expired - will refresh on next request');",
+					"}"
+				],
+				"type": "text/javascript"
+			}
+		}
+	]
+}

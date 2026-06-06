@@ -1,0 +1,9 @@
+vendor/
+node_modules/
+composer.lock
+composer.phar
+.phpunit.result.cache
+phpunit.xml
+.env
+.DS_Store
+Thumbs.db
