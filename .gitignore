@@ -7,3 +7,4 @@ phpunit.xml
 .env
 .DS_Store
 Thumbs.db
+.opencode/AGENTS.md

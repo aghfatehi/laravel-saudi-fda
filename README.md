@@ -876,7 +876,7 @@ The package includes PHPUnit tests for:
 
 ## Postman Collection
 
-The repository includes a complete Postman collection: **[SFDA-API-Postman.json](SFDA-API-Postman.json)**
+The repository includes a complete Postman collection: **[SFDA-API-Postman.json](postman/SFDA-API-Postman.json)**
 
 **Features:**
 - All 24 SFDA API endpoints with response examples
