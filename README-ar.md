@@ -1,5 +1,5 @@
 <!--
-  المؤلف: AL-AGHBARI Fatehi (الغباري فتحي)
+  المؤلف: AL-AGHBARI Fatehi (الاغبري فتحي)
   الشركة: FsoftDev.com
   الموقع: https://fsoftdev.com | https://github.com/aghfatehi
   الحزمة: aghfatehi/laravel-saudi-fda
@@ -21,7 +21,7 @@
 <h1 align="center">ربط الهيئة العامة للغذاء والدواء السعودية (SFDA) مع Laravel</h1>
 <h3 align="center">دمج واجهات هيئة الغذاء والدواء العامة مع لارافيل — مستحضرات التجميل، الأدوية، المنتجات الغذائية، الأجهزة الطبية</h3>
 <h3 align="center">Laravel package for the Saudi Food and Drug Authority public APIs — Cosmetics, Drugs, Food, Medical Devices</h3>
-<h4 align="center">من <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi (الغباري فتحي)</a></h4>
+<h4 align="center">من <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi (الاغبري فتحي)</a></h4>
 
 <p align="center">
     <strong>حزمة لربط هيئة الغذاء والدواء السعودية مع لارافيل: مصادقة تلقائية OAuth2، واجهات التجميل والأدوية والغذاء والأجهزة الطبية. SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
@@ -364,6 +364,6 @@ php artisan saudi-fda:check --config
 
 ## الترخيص
 
-MIT — من إنشاء [AL-AGHBARI Fatehi (الغباري فتحي)](https://github.com/aghfatehi) — [FsoftDev.com](https://fsoftdev.com)
+MIT — من إنشاء [AL-AGHBARI Fatehi (الاغبري فتحي)](https://github.com/aghfatehi) — [FsoftDev.com](https://fsoftdev.com)
 
-**كلمات مفتاحية:** هيئة الغذاء والدواء السعودية, SFDA, SFDA API Laravel, الهيئة العامة للغذاء والدواء, ربط SFDA مع Laravel, SFDA cosmetics, SFDA drugs, SFDA food, SFDA medical devices, API هيئة الغذاء والدواء, الغباري فتحي, AL-AGHBARI Fatehi, لارافيل 9, لارافيل 10, لارافيل 11, لارافيل 12, لارافيل 13
+**كلمات مفتاحية:** هيئة الغذاء والدواء السعودية, SFDA, SFDA API Laravel, الهيئة العامة للغذاء والدواء, ربط SFDA مع Laravel, SFDA cosmetics, SFDA drugs, SFDA food, SFDA medical devices, API هيئة الغذاء والدواء, الاغبري فتحي, AL-AGHBARI Fatehi, لارافيل 9, لارافيل 10, لارافيل 11, لارافيل 12, لارافيل 13

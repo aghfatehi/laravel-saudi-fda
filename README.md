@@ -3,7 +3,7 @@
   Website: https://fsoftdev.com | https://github.com/aghfatehi
   Company: FsoftDev.com
   Package: aghfatehi/laravel-saudi-fda
-  SEO: Saudi FDA API Laravel, SFDA Laravel Integration, الهيئة العامة للغذاء والدواء لارافيل
+  SEO: Saudi FDA API Laravel, SFDA Laravel Integration, SFDA API PHP Laravel
 -->
 
 <p align="center">
@@ -20,11 +20,10 @@
 
 <h1 align="center">Saudi FDA (SFDA) API Integration for Laravel</h1>
 <h3 align="center">Laravel package for the Saudi Food and Drug Authority public APIs — Cosmetics, Drugs, Food, Medical Devices</h3>
-<h3 align="center">ربط الهيئة العامة للغذاء والدواء السعودية مع لارافيل — مستحضرات التجميل، الأدوية، المنتجات الغذائية، الأجهزة الطبية</h3>
-<h4 align="center">By <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi</a> &mdash; <strong>فتحي الأغبري</strong></h4>
+<h4 align="center">By <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi</a></h4>
 
 <p align="center">
-    <strong>SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs. دمج هيئة الغذاء والدواء السعودية مع لارافيل: المصادقة التلقائية وواجهات التجميل والأدوية والغذاء والأجهزة الطبية</strong>
+    <strong>SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
 </p>
 
 ---
@@ -510,5 +509,3 @@ Complete Postman collection with all 24 SFDA API endpoints:
 ## License
 
 MIT — Created by [AL-AGHBARI Fatehi](https://github.com/aghfatehi) — [FsoftDev.com](https://fsoftdev.com)
-
-**Keywords:** SFDA, Saudi FDA, SFDA API, Laravel SFDA, الهيئة العامة للغذاء والدواء, SFDA Laravel package, SFDA cosmetics API, SFDA drugs API, SFDA food API, SFDA medical devices API, Saudi Arabia API integration, SFDA OAuth2, مستحضرات التجميل هيئة الغذاء والدواء, الأدوية هيئة الغذاء والدواء, المنتجات الغذائية هيئة الغذاء والدواء, الأجهزة الطبية هيئة الغذاء والدواء, SFDA API PHP, SFDA integration Laravel 9, Laravel 10, Laravel 11, Laravel 12, Laravel 13
