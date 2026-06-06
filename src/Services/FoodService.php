@@ -19,12 +19,15 @@ class FoodService
         $this->baseUrl = config('saudi-fda.api.food.base', 'https://apis.sfda.gov.sa:9002/v2/Food');
     }
 
-    public function list(int $page = 1): object
+    public function list(array $options = []): object
     {
         $start = microtime(true);
+        $page = $options['page'] ?? 1;
+        $limit = $options['limit'] ?? null;
 
         try {
-            $response = $this->client->get($this->baseUrl, "product/list/{$page}");
+            $query = $limit ? "product/list/{$page}?limit={$limit}" : "product/list/{$page}";
+            $response = $this->client->get($this->baseUrl, $query);
             ApiRequestSucceeded::dispatch('food', "product/list/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -78,12 +81,14 @@ class FoodService
         }
     }
 
-    public function search(string $keyword, int $page = 1): object
+    public function search(array $options = []): object
     {
         $start = microtime(true);
+        $keyword = $options['keyword'] ?? $options['Keyword'] ?? '';
+        $page = $options['page'] ?? 1;
 
         try {
-            $response = $this->client->get($this->baseUrl, "product/search/{$keyword}/{$page}");
+            $response = $this->client->get($this->baseUrl, "product/search/" . urlencode($keyword) . "/{$page}");
             ApiRequestSucceeded::dispatch('food', "product/search/{$keyword}/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {

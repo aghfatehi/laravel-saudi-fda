@@ -19,13 +19,14 @@ class CosmeticsService
         $this->baseUrl = config('saudi-fda.api.cosmetics.base', 'https://apis.sfda.gov.sa:9002/v2/cosmetics');
     }
 
-    public function list(int $page = 1, ?string $keyword = null): object
+    public function list(array $options = []): object
     {
         $start = microtime(true);
-        $query = ['page' => $page];
-        if ($keyword !== null) {
-            $query['Keyword'] = $keyword;
-        }
+        $query = array_filter([
+            'page' => $options['page'] ?? 1,
+            'limit' => $options['limit'] ?? null,
+            'Keyword' => $options['keyword'] ?? $options['Keyword'] ?? null,
+        ], fn($v) => $v !== null);
 
         try {
             $response = $this->client->get($this->baseUrl, 'list', $query);
@@ -82,16 +83,17 @@ class CosmeticsService
         }
     }
 
-    public function search(?string $specificNameAr = null, ?string $specificName = null, ?string $brandName = null, ?string $barCode = null, ?string $cosmeticNumber = null, int $page = 1): object
+    public function search(array $options = []): object
     {
         $start = microtime(true);
         $query = array_filter([
-            'SpecificNameAr' => $specificNameAr,
-            'SpecificName' => $specificName,
-            'BrandName' => $brandName,
-            'barCode' => $barCode,
-            'CosmeticNumber' => $cosmeticNumber,
-            'page' => $page,
+            'SpecificNameAr' => $options['SpecificNameAr'] ?? $options['specificNameAr'] ?? null,
+            'SpecificName' => $options['SpecificName'] ?? $options['specificName'] ?? null,
+            'BrandName' => $options['BrandName'] ?? $options['brandName'] ?? null,
+            'barCode' => $options['barCode'] ?? $options['barcode'] ?? null,
+            'CosmeticNumber' => $options['CosmeticNumber'] ?? $options['cosmeticNumber'] ?? null,
+            'page' => $options['page'] ?? 1,
+            'limit' => $options['limit'] ?? null,
         ], fn($v) => $v !== null);
 
         try {
@@ -109,7 +111,7 @@ class CosmeticsService
         $start = microtime(true);
 
         try {
-            $response = $this->client->get($this->baseUrl, "search/{$keyword}/{$page}");
+            $response = $this->client->get($this->baseUrl, "search/" . urlencode($keyword) . "/{$page}");
             ApiRequestSucceeded::dispatch('cosmetics', "search/{$keyword}/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {

@@ -19,12 +19,13 @@ class DrugService
         $this->baseUrl = config('saudi-fda.api.drugs.base', 'https://apis.sfda.gov.sa:9002/v2/DMS');
     }
 
-    public function list(int $page = 1): object
+    public function list(array $options = []): object
     {
         $start = microtime(true);
 
         try {
-            $response = $this->client->get($this->baseUrl, 'drug/list', ['page' => $page]);
+            $query = array_filter(['page' => $options['page'] ?? 1, 'limit' => $options['limit'] ?? null], fn($v) => $v !== null);
+            $response = $this->client->get($this->baseUrl, 'drug/list', $query);
             ApiRequestSucceeded::dispatch('drugs', 'drug/list', (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {

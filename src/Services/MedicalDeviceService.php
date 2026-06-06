@@ -19,12 +19,15 @@ class MedicalDeviceService
         $this->baseUrl = config('saudi-fda.api.medical_devices.base', 'https://apis.sfda.gov.sa:9002/v2/dwh-md');
     }
 
-    public function listLowRisk(int $page = 1): object
+    public function listLowRisk(array $options = []): object
     {
         $start = microtime(true);
+        $page = $options['page'] ?? 1;
+        $limit = $options['limit'] ?? null;
 
         try {
-            $response = $this->client->get($this->baseUrl, "Lowrisk/list/{$page}");
+            $query = $limit ? "Lowrisk/list/{$page}?limit={$limit}" : "Lowrisk/list/{$page}";
+            $response = $this->client->get($this->baseUrl, $query);
             ApiRequestSucceeded::dispatch('medical_devices', "Lowrisk/list/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -60,7 +63,7 @@ class MedicalDeviceService
         $start = microtime(true);
 
         try {
-            $response = $this->client->get($this->baseUrl, "Lowrisk/search/{$keyword}/{$page}");
+            $response = $this->client->get($this->baseUrl, "Lowrisk/search/" . urlencode($keyword) . "/{$page}");
             ApiRequestSucceeded::dispatch('medical_devices', "Lowrisk/search/{$keyword}/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -69,12 +72,15 @@ class MedicalDeviceService
         }
     }
 
-    public function listGHTF(int $page = 1): object
+    public function listGHTF(array $options = []): object
     {
         $start = microtime(true);
+        $page = $options['page'] ?? 1;
+        $limit = $options['limit'] ?? null;
 
         try {
-            $response = $this->client->get($this->baseUrl, "GHTF/list/{$page}");
+            $query = $limit ? "GHTF/list/{$page}?limit={$limit}" : "GHTF/list/{$page}";
+            $response = $this->client->get($this->baseUrl, $query);
             ApiRequestSucceeded::dispatch('medical_devices', "GHTF/list/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -125,7 +131,7 @@ class MedicalDeviceService
         $start = microtime(true);
 
         try {
-            $response = $this->client->get($this->baseUrl, "GHTF/search/{$keyword}/{$page}");
+            $response = $this->client->get($this->baseUrl, "GHTF/search/" . urlencode($keyword) . "/{$page}");
             ApiRequestSucceeded::dispatch('medical_devices', "GHTF/search/{$keyword}/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -134,12 +140,15 @@ class MedicalDeviceService
         }
     }
 
-    public function listTFA(int $page = 1): object
+    public function listTFA(array $options = []): object
     {
         $start = microtime(true);
+        $page = $options['page'] ?? 1;
+        $limit = $options['limit'] ?? null;
 
         try {
-            $response = $this->client->get($this->baseUrl, "TFA/list/{$page}");
+            $query = $limit ? "TFA/list/{$page}?limit={$limit}" : "TFA/list/{$page}";
+            $response = $this->client->get($this->baseUrl, $query);
             ApiRequestSucceeded::dispatch('medical_devices', "TFA/list/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {
@@ -167,7 +176,7 @@ class MedicalDeviceService
         $start = microtime(true);
 
         try {
-            $response = $this->client->get($this->baseUrl, "TFA/search/{$keyword}/{$page}");
+            $response = $this->client->get($this->baseUrl, "TFA/search/" . urlencode($keyword) . "/{$page}");
             ApiRequestSucceeded::dispatch('medical_devices', "TFA/search/{$keyword}/{$page}", (array)$response, microtime(true) - $start);
             return $response;
         } catch (SaudiFdaException $e) {

@@ -35,22 +35,22 @@ Route::prefix($prefix)->middleware($middleware)->group(function () {
         })->name('saudi-fda.cosmetics.list');
 
         Route::get('{id}', function (string $id, SaudiFdaClient $client) {
-            $data = $client->cosmetics()->byId($id);
+            $data = $client->cosmetics()->getById((int) $id);
             return response()->json($data);
         })->name('saudi-fda.cosmetics.by-id');
 
         Route::get('number/{cosmeticNumber}', function (string $cosmeticNumber, SaudiFdaClient $client) {
-            $data = $client->cosmetics()->byCosmeticNumber($cosmeticNumber);
+            $data = $client->cosmetics()->getByCosmeticNumber($cosmeticNumber);
             return response()->json($data);
         })->name('saudi-fda.cosmetics.by-number');
 
         Route::get('barcode/{barcode}', function (string $barcode, SaudiFdaClient $client) {
-            $data = $client->cosmetics()->byBarcode($barcode);
+            $data = $client->cosmetics()->getByBarcode($barcode);
             return response()->json($data);
         })->name('saudi-fda.cosmetics.by-barcode');
 
         Route::post('search', function (SaudiFdaClient $client) {
-            $data = $client->cosmetics()->search(request()->input('keyword', ''));
+            $data = $client->cosmetics()->search(request()->all());
             return response()->json($data);
         })->name('saudi-fda.cosmetics.search');
     });
@@ -69,29 +69,29 @@ Route::prefix($prefix)->middleware($middleware)->group(function () {
         })->name('saudi-fda.food.list');
 
         Route::get('{id}', function (string $id, SaudiFdaClient $client) {
-            $data = $client->food()->byId($id);
+            $data = $client->food()->getById((int) $id);
             return response()->json($data);
         })->name('saudi-fda.food.by-id');
 
         Route::post('search', function (SaudiFdaClient $client) {
-            $data = $client->food()->search(request()->input('keyword', ''));
+            $data = $client->food()->search(request()->all());
             return response()->json($data);
         })->name('saudi-fda.food.search');
     });
 
     Route::prefix('medical-devices')->group(function () {
         Route::get('low-risk', function (SaudiFdaClient $client) {
-            $data = $client->medicalDevices()->lowRiskList(request()->all());
+            $data = $client->medicalDevices()->listLowRisk(request()->all());
             return response()->json($data);
         })->name('saudi-fda.medical-devices.low-risk');
 
         Route::get('ghtf', function (SaudiFdaClient $client) {
-            $data = $client->medicalDevices()->ghtfList(request()->all());
+            $data = $client->medicalDevices()->listGHTF(request()->all());
             return response()->json($data);
         })->name('saudi-fda.medical-devices.ghtf');
 
         Route::get('tfa', function (SaudiFdaClient $client) {
-            $data = $client->medicalDevices()->tfaList(request()->all());
+            $data = $client->medicalDevices()->listTFA(request()->all());
             return response()->json($data);
         })->name('saudi-fda.medical-devices.tfa');
     });
