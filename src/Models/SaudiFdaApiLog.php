@@ -8,21 +8,12 @@ class SaudiFdaApiLog extends Model
 {
     protected $table = 'sfda_api_logs';
 
-    protected $fillable = [
-        'service',
-        'endpoint',
-        'method',
-        'http_code',
-        'request_payload',
-        'response_payload',
-        'error_message',
-        'duration_ms',
-        'ip_address',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'request_payload' => 'array',
         'response_payload' => 'array',
+        'http_code' => 'integer',
         'duration_ms' => 'float',
     ];
 }

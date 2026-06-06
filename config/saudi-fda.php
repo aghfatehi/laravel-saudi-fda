@@ -104,6 +104,23 @@ return [
         'enabled' => env('SFDA_LOGGING_ENABLED', true),
         'channel' => env('SFDA_LOG_CHANNEL', 'stack'),
         'level' => env('SFDA_LOG_LEVEL', 'info'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | Database Logging
+        |--------------------------------------------------------------------------
+        |
+        | When enabled, every API request/response is stored in the
+        | `sfda_api_logs` table for auditing and debugging.
+        |
+        | Run `php artisan vendor:publish --tag=saudi-fda-migrations`
+        | then `php artisan migrate` to create the required table.
+        |
+        */
+        'database' => [
+            'enabled' => env('SFDA_LOG_DATABASE_ENABLED', false),
+            'connection' => env('SFDA_LOG_DATABASE_CONNECTION'),
+        ],
     ],
 
     /*

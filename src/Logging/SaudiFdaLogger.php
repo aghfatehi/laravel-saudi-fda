@@ -2,6 +2,7 @@
 
 namespace Aghfatehi\SaudiFda\Logging;
 
+use Aghfatehi\SaudiFda\Models\SaudiFdaApiLog;
 use Illuminate\Support\Facades\Log;
 
 class SaudiFdaLogger
@@ -10,6 +11,7 @@ class SaudiFdaLogger
     private string $channel;
     private string $level;
     private bool $maskPii;
+    private bool $databaseEnabled;
 
     public function __construct()
     {
@@ -17,6 +19,7 @@ class SaudiFdaLogger
         $this->channel = config('saudi-fda.logging.channel', 'stack');
         $this->level = config('saudi-fda.logging.level', 'info');
         $this->maskPii = config('saudi-fda.logging.mask_pii', true);
+        $this->databaseEnabled = config('saudi-fda.logging.database.enabled', false);
     }
 
     public function info(string $message, array $context = []): void
@@ -32,6 +35,45 @@ class SaudiFdaLogger
     public function error(string $message, array $context = []): void
     {
         $this->log('error', $message, $context);
+    }
+
+    public function logRequest(
+        string $service,
+        string $endpoint,
+        string $method = 'GET',
+        ?int $httpCode = null,
+        array $requestPayload = null,
+        array $responsePayload = null,
+        ?string $errorMessage = null,
+        ?float $durationMs = null,
+        ?string $ipAddress = null,
+    ): void {
+        $this->log('info', "{$service}:{$endpoint}", [
+            'service' => $service,
+            'endpoint' => $endpoint,
+            'http_code' => $httpCode,
+            'duration_ms' => $durationMs,
+        ]);
+
+        if (!$this->databaseEnabled) {
+            return;
+        }
+
+        try {
+            SaudiFdaApiLog::create([
+                'service' => $service,
+                'endpoint' => $endpoint,
+                'method' => $method,
+                'http_code' => $httpCode,
+                'request_payload' => $this->maskPii && $requestPayload ? $this->maskSensitiveData($requestPayload) : $requestPayload,
+                'response_payload' => $this->maskPii && $responsePayload ? $this->maskSensitiveData($responsePayload) : $responsePayload,
+                'error_message' => $errorMessage,
+                'duration_ms' => $durationMs,
+                'ip_address' => $ipAddress,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error("[SFDA] Failed to write API log to database: {$e->getMessage()}");
+        }
     }
 
     private function log(string $level, string $message, array $context = []): void

@@ -3,6 +3,7 @@
 namespace Aghfatehi\SaudiFda;
 
 use Aghfatehi\SaudiFda\Commands\SaudiFdaCheckCommand;
+use Aghfatehi\SaudiFda\Listeners\LogApiRequestToDatabase;
 use Aghfatehi\SaudiFda\Logging\SaudiFdaLogger;
 use Aghfatehi\SaudiFda\Services\ApiClient;
 use Aghfatehi\SaudiFda\Services\AuthService;
@@ -10,27 +11,11 @@ use Aghfatehi\SaudiFda\Services\CosmeticsService;
 use Aghfatehi\SaudiFda\Services\DrugService;
 use Aghfatehi\SaudiFda\Services\FoodService;
 use Aghfatehi\SaudiFda\Services\MedicalDeviceService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class SaudiFdaServiceProvider extends ServiceProvider
 {
-    public function boot(): void
-    {
-        $this->publishes([
-            __DIR__ . '/../config/saudi-fda.php' => config_path('saudi-fda.php'),
-        ], 'saudi-fda-config');
-
-        if (config('saudi-fda.routes.enabled', true)) {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-        }
-
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                SaudiFdaCheckCommand::class,
-            ]);
-        }
-    }
-
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/saudi-fda.php', 'saudi-fda');
@@ -78,5 +63,51 @@ class SaudiFdaServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(SaudiFdaClient::class, 'saudi-fda');
+    }
+
+    public function boot(): void
+    {
+        $this->registerPublishing();
+        $this->registerMigrations();
+        $this->registerRoutes();
+        $this->registerCommands();
+        $this->registerEventSubscribers();
+    }
+
+    private function registerPublishing(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../config/saudi-fda.php' => config_path('saudi-fda.php'),
+        ], 'saudi-fda-config');
+
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'saudi-fda-migrations');
+    }
+
+    private function registerMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+    }
+
+    private function registerRoutes(): void
+    {
+        if (config('saudi-fda.routes.enabled', true)) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        }
+    }
+
+    private function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SaudiFdaCheckCommand::class,
+            ]);
+        }
+    }
+
+    private function registerEventSubscribers(): void
+    {
+        Event::subscribe(LogApiRequestToDatabase::class);
     }
 }

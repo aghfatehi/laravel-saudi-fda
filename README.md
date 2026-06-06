@@ -96,6 +96,8 @@ SFDA_ENVIRONMENT=sandbox
 | `SFDA_ROUTES_PREFIX` | `api/saudi-fda` | No | URI prefix for built-in routes |
 | `SFDA_LOGGING_ENABLED` | `true` | No | Enable API call logging |
 | `SFDA_LOG_LEVEL` | `info` | No | Log level (debug, info, notice, warning, error) |
+| `SFDA_LOG_DATABASE_ENABLED` | `false` | No | Log API requests to `sfda_api_logs` table |
+| `SFDA_LOG_DATABASE_CONNECTION` | — | No | Database connection for logging (defaults to your default DB) |
 
 ### Override Base URLs (optional)
 
@@ -146,6 +148,67 @@ class ProductController extends Controller
     }
 }
 ```
+
+---
+
+### Token Storage & Cache
+
+The access token is automatically cached using Laravel's cache system to avoid requesting a new token on every API call.
+
+**How it works:**
+
+1. On first API call, the package requests an OAuth2 token from SFDA
+2. The token (as an `AccessTokenDTO`) is stored in the cache with a TTL of `expiresIn - 300` seconds (5-minute safety margin)
+3. Subsequent calls check the cache first — if a valid `AccessTokenDTO` is found, it's reused
+4. If a cached token exists but is expired, or if `forceRefresh` is used, a new token is fetched and the cache is updated
+5. If any API call receives a **401 Unauthorized**, the package automatically refreshes the token and retries the request once
+
+**Cache configuration via `.env`:**
+
+```env
+SFDA_TOKEN_CACHE_ENABLED=true        # Enable/disable token caching
+SFDA_TOKEN_CACHE_STORE=file          # Cache driver (file, redis, memcached, database)
+SFDA_TOKEN_CACHE_KEY=sfda_access_token  # Cache key name
+```
+
+**Example — force refresh token:**
+
+```php
+use Aghfatehi\SaudiFda\Facades\SaudiFda;
+
+// Bypass cache, always get a fresh token
+$token = SaudiFda::auth()->getAccessToken(true);
+
+// Token details
+$token->accessToken;  // string — the Bearer token
+$token->expiresIn;    // int — seconds until expiry (typically 86400)
+$token->tokenType;    // string — "Bearer"
+```
+
+**Example — clear cached token manually:**
+
+```php
+use Illuminate\Support\Facades\Cache;
+
+Cache::store(config('saudi-fda.token_cache.store', 'file'))
+    ->forget(config('saudi-fda.token_cache.key', 'sfda_access_token'));
+```
+
+**Example — use a different cache store (Redis example):**
+
+```env
+SFDA_TOKEN_CACHE_STORE=redis
+```
+
+The package stores a serialized `AccessTokenDTO` object. Any Laravel cache driver that supports serialization works out of the box.
+
+**How auto-refresh works:**
+
+```
+Request -> 401 Unauthorized -> Package auto-refreshes token -> Retries request -> Succeeds
+```
+
+This happens transparently in `ApiClient` — the method `tokenRefreshCallback` is called when a 401 is detected, and the request is retried once.
 
 ---
 
@@ -710,14 +773,71 @@ try {
 
 ---
 
+## Database Logging
+
+Every API request/response can be stored in the `sfda_api_logs` table for auditing, debugging, and analytics.
+
+**Enable database logging in `.env`:**
+
+```env
+SFDA_LOG_DATABASE_ENABLED=true
+SFDA_LOG_DATABASE_CONNECTION=mysql   # optional, defaults to default DB connection
+```
+
+**Create the table:**
+
+```bash
+php artisan vendor:publish --tag=saudi-fda-migrations
+php artisan migrate
+```
+
+**What gets logged:**
+
+| Column | Type | Description |
+|---|---|---|
+| `service` | string | API service name (`cosmetics`, `drugs`, `food`, `medical_devices`) |
+| `endpoint` | string | API endpoint called |
+| `method` | string | HTTP method (`GET`) |
+| `http_code` | int | HTTP status code |
+| `request_payload` | json | Request parameters (masked for sensitive data) |
+| `response_payload` | json | API response data (masked for sensitive data) |
+| `error_message` | text | Error message if the request failed |
+| `duration_ms` | float | Request duration in milliseconds |
+| `ip_address` | string | Client IP address |
+| `created_at` | timestamp | When the request was made |
+
+**Query logs with Eloquent:**
+
+```php
+use Aghfatehi\SaudiFda\Models\SaudiFdaApiLog;
+
+// Recent failed requests
+$failures = SaudiFdaApiLog::whereNotNull('error_message')
+    ->latest()
+    ->take(10)
+    ->get();
+
+// Slow requests (> 2 seconds)
+$slow = SaudiFdaApiLog::where('duration_ms', '>', 2000)
+    ->latest()
+    ->get();
+
+// Requests by service
+$cosmeticsLogs = SaudiFdaApiLog::where('service', 'cosmetics')
+    ->whereDate('created_at', today())
+    ->get();
+```
+
+**Sensitive data masking:** When database logging is enabled, the package automatically masks credentials, tokens, and authorization headers in the logged payloads (e.g., `Ejmb****`).
+
+---
+
 ## Events
 
-| Event | Description | Payload |
+| Event | Fired When | Payload |
 |---|---|---|
-| `Aghfatehi\SaudiFda\Events\ApiRequestSucceeded` | Fired after every successful API call | Service name, endpoint, response data, duration |
-| `Aghfatehi\SaudiFda\Events\ApiRequestFailed` | Fired after every failed API call | Service name, endpoint, error message, HTTP code |
-
-Listen to these events in your `EventServiceProvider` for monitoring, logging, or metrics.
+| `ApiRequestSucceeded` | Any API request succeeds | Endpoint + duration |
+| `ApiRequestFailed` | Any API request fails | Endpoint + response data |
 
 ---
 
