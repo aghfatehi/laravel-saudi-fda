@@ -1,21 +1,21 @@
 <!--
-  المؤلف: AL-AGHBARI Fatehi (الاغبري فتحي)
-  الشركة: FsoftDev.com
-  الموقع: https://fsoftdev.com | https://github.com/aghfatehi
-  الحزمة: aghfatehi/laravel-saudi-fda
-  SEO: ربط الهيئة العامة للغذاء والدواء مع لارافيل, SFDA Laravel, SFDA API
+ المؤلف: AL-AGHBARI Fatehi (الاغبري فتحي)
+ الشركة: FsoftDev.com
+ الموقع: https://fsoftdev.com | https://github.com/aghfatehi
+ الحزمة: aghfatehi/laravel-saudi-fda
+ SEO: ربط الهيئة العامة للغذاء والدواء مع لارافيل, SFDA Laravel, SFDA API
 -->
 
 <p align="center">
-    <a href="https://www.php.net/"><img src="https://img.shields.io/badge/php-^8.1-8892BF.svg?style=for-the-badge&logo=php" alt="PHP Version"></a>
-    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-9|10|11|12|13-FF2D20.svg?style=for-the-badge&logo=laravel" alt="Laravel Version"></a>
-    <a href="https://sfda.gov.sa/"><img src="https://img.shields.io/badge/SFDA-Cosmetics_%2B_Drugs_%2B_Food_%2B_Medical_Devices-00A859.svg?style=for-the-badge" alt="SFDA Services"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
-    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
-    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
-    <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FsoftDev-FsoftDev.com-blue.svg?style=for-the-badge" alt="FsoftDev"></a>
-    <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
+ <a href="https://www.php.net/"><img src="https://img.shields.io/badge/php-^8.1-8892BF.svg?style=for-the-badge&logo=php" alt="PHP Version"></a>
+ <a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-9|10|11|12|13-FF2D20.svg?style=for-the-badge&logo=laravel" alt="Laravel Version"></a>
+ <a href="https://sfda.gov.sa/"><img src="https://img.shields.io/badge/SFDA-Cosmetics_%2B_Drugs_%2B_Food_%2B_Medical_Devices-00A859.svg?style=for-the-badge" alt="SFDA Services"></a>
+ <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="License"></a>
+ <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
+ <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
+ <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
+ <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FsoftDev-FsoftDev.com-blue.svg?style=for-the-badge" alt="FsoftDev"></a>
+ <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
 </p>
 
 <h1 align="center">ربط الهيئة العامة للغذاء والدواء السعودية (SFDA) مع Laravel</h1>
@@ -24,7 +24,7 @@
 <h4 align="center">من <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi (الاغبري فتحي)</a></h4>
 
 <p align="center">
-    <strong>حزمة لربط هيئة الغذاء والدواء السعودية مع لارافيل: مصادقة تلقائية OAuth2، واجهات التجميل والأدوية والغذاء والأجهزة الطبية. SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
+ <strong>حزمة لربط هيئة الغذاء والدواء السعودية مع لارافيل: مصادقة تلقائية OAuth2، واجهات التجميل والأدوية والغذاء والأجهزة الطبية. SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
 </p>
 
 ---
@@ -170,24 +170,24 @@ $drugs->list(['page' => 1, 'limit' => 100]);
 **مثال على الاستجابة:**
 ```json
 {
-    "data": [
-        {
-            "registerNumber": "21-37-10",
-            "tradeName": "ORELOX 100MG TABLETS",
-            "scientificName": "CEFPODOXIME",
-            "atcCode1": "J01DD14",
-            "strength": "100",
-            "price": "30.80",
-            "pharmaceuticalForm": { "nameEn": "Tablet" },
-            "marketingStatus": { "nameEn": "Marketed" },
-            "legalStatus": { "nameEn": "Prescription" },
-            "company": { "nameEn": "SANOFI WINTHROP INDUSTRIE" }
-        }
-    ],
-    "currentPage": 1,
-    "pageCount": 791,
-    "pageSize": 15,
-    "rowCount": 11856
+ "data": [
+ {
+ "registerNumber": "21-37-10",
+ "tradeName": "ORELOX 100MG TABLETS",
+ "scientificName": "CEFPODOXIME",
+ "atcCode1": "J01DD14",
+ "strength": "100",
+ "price": "30.80",
+ "pharmaceuticalForm": { "nameEn": "Tablet" },
+ "marketingStatus": { "nameEn": "Marketed" },
+ "legalStatus": { "nameEn": "Prescription" },
+ "company": { "nameEn": "SANOFI WINTHROP INDUSTRIE" }
+ }
+ ],
+ "currentPage": 1,
+ "pageCount": 791,
+ "pageSize": 15,
+ "rowCount": 11856
 }
 ```
 
@@ -315,11 +315,11 @@ use Aghfatehi\SaudiFda\Exceptions\SaudiFdaException;
 use Aghfatehi\SaudiFda\Exceptions\AuthenticationException;
 
 try {
-    $products = SaudiFda::cosmetics()->list();
+ $products = SaudiFda::cosmetics()->list();
 } catch (AuthenticationException $e) {
-    Log::error('فشل المصادقة مع هيئة الغذاء والدواء: ' . $e->getMessage());
+ Log::error('فشل المصادقة مع هيئة الغذاء والدواء: ' . $e->getMessage());
 } catch (SaudiFdaException $e) {
-    Log::error('خطأ في API: ' . $e->getMessage());
+ Log::error('خطأ في API: ' . $e->getMessage());
 }
 ```
 
@@ -351,14 +351,20 @@ php artisan saudi-fda:check --config
 
 ## مجموعة Postman
 
-📁 **[SFDA-API-Postman.json](SFDA-API-Postman.json)**
+ **[SFDA-API-Postman.json](SFDA-API-Postman.json)**
 
 تحتوي على جميع نقاط النهاية الـ 24 مع:
 - مصادقة تلقائية عبر pre-request script
 - أمثلة استجابة لكل طلب
 - متغيرات قابلة للتعديل
 
-**الاستيراد:** Postman → Import → اختر `SFDA-API-Postman.json`
+ **طريقة الاستخدام:**
+1. Postman → Import → اختر `SFDA-API-Postman.json`
+2. Environment → Add (أو اختيار بيئة موجودة)
+3. أضف متغيرات البيئة:
+   - `SFDA_CONSUMER_KEY` = مفتاح المستهلك
+   - `SFDA_CONSUMER_SECRET` = المفتاح السري
+4. أرسل أول طلب — التوكن يُجلب تلقائياً
 
 ---
 

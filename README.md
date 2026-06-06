@@ -1,21 +1,21 @@
 <!--
-  Author: AL-AGHBARI Fatehi
-  Website: https://fsoftdev.com | https://github.com/aghfatehi
-  Company: FsoftDev.com
-  Package: aghfatehi/laravel-saudi-fda
-  SEO: Saudi FDA API Laravel, SFDA Laravel Integration, SFDA API PHP Laravel
+ Author: AL-AGHBARI Fatehi
+ Website: https://fsoftdev.com | https://github.com/aghfatehi
+ Company: FsoftDev.com
+ Package: aghfatehi/laravel-saudi-fda
+ SEO: Saudi FDA API Laravel, SFDA Laravel Integration, SFDA API PHP Laravel
 -->
 
 <p align="center">
-    <a href="https://www.php.net/"><img src="https://img.shields.io/badge/php-^8.1-8892BF.svg?style=for-the-badge&logo=php" alt="PHP Version"></a>
-    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-9|10|11|12|13-FF2D20.svg?style=for-the-badge&logo=laravel" alt="Laravel Version"></a>
-    <a href="https://sfda.gov.sa/"><img src="https://img.shields.io/badge/SFDA-Cosmetics_%2B_Drugs_%2B_Food_%2B_Medical_Devices-00A859.svg?style=for-the-badge" alt="SFDA Services"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
-    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
-    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
-    <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FsoftDev-FsoftDev.com-blue.svg?style=for-the-badge" alt="FsoftDev"></a>
-    <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
+ <a href="https://www.php.net/"><img src="https://img.shields.io/badge/php-^8.1-8892BF.svg?style=for-the-badge&logo=php" alt="PHP Version"></a>
+ <a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-9|10|11|12|13-FF2D20.svg?style=for-the-badge&logo=laravel" alt="Laravel Version"></a>
+ <a href="https://sfda.gov.sa/"><img src="https://img.shields.io/badge/SFDA-Cosmetics_%2B_Drugs_%2B_Food_%2B_Medical_Devices-00A859.svg?style=for-the-badge" alt="SFDA Services"></a>
+ <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="License"></a>
+ <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
+ <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
+ <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
+ <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FsoftDev-FsoftDev.com-blue.svg?style=for-the-badge" alt="FsoftDev"></a>
+ <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
 </p>
 
 <h1 align="center">Saudi FDA (SFDA) API Integration for Laravel</h1>
@@ -23,7 +23,7 @@
 <h4 align="center">By <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi</a></h4>
 
 <p align="center">
-    <strong>SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
+ <strong>SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
 </p>
 
 ---
@@ -129,12 +129,12 @@ use Aghfatehi\SaudiFda\SaudiFdaClient;
 
 class ProductController extends Controller
 {
-    public function __construct(private SaudiFdaClient $sfda) {}
+ public function __construct(private SaudiFdaClient $sfda) {}
 
-    public function search(Request $request)
-    {
-        return $this->sfda->cosmetics()->byBarcode($request->barcode);
-    }
+ public function search(Request $request)
+ {
+ return $this->sfda->cosmetics()->byBarcode($request->barcode);
+ }
 }
 ```
 
@@ -157,7 +157,7 @@ $token = SaudiFda::auth()->getAccessToken();
 
 // $token is an AccessTokenDTO with:
 $token->accessToken; // string - the Bearer token
-$token->expiresIn;   // int - seconds until expiry
+$token->expiresIn; // int - seconds until expiry
 
 // Check credentials validity
 SaudiFda::auth()->validateCredentials(); // bool
@@ -211,12 +211,12 @@ $product = SaudiFda::cosmetics()->byBarcode('6281007990215');
 
 ```php
 $results = SaudiFda::cosmetics()->search([
-    'BrandName' => 'AVON',
-    'SpecificName' => '',
-    'SpecificNameAr' => '',
-    'barCode' => '',
-    'CosmeticNumber' => '',
-    'page' => 1,
+ 'BrandName' => 'AVON',
+ 'SpecificName' => '',
+ 'SpecificNameAr' => '',
+ 'barCode' => '',
+ 'CosmeticNumber' => '',
+ 'page' => 1,
 ]);
 ```
 **SFDA Endpoint:** `GET /v2/cosmetics/search`
@@ -255,24 +255,24 @@ $drugs = SaudiFda::drugs()->list(['page' => 1, 'limit' => 100]);
 **Sample Response:**
 ```json
 {
-    "data": [
-        {
-            "registerNumber": "21-37-10",
-            "tradeName": "ORELOX 100MG TABLETS",
-            "scientificName": "CEFPODOXIME",
-            "atcCode1": "J01DD14",
-            "strength": "100",
-            "price": "30.80",
-            "pharmaceuticalForm": { "nameEn": "Tablet" },
-            "marketingStatus": { "nameEn": "Marketed" },
-            "legalStatus": { "nameEn": "Prescription" },
-            "company": { "nameEn": "SANOFI WINTHROP INDUSTRIE" }
-        }
-    ],
-    "currentPage": 1,
-    "pageCount": 791,
-    "pageSize": 15,
-    "rowCount": 11856
+ "data": [
+ {
+ "registerNumber": "21-37-10",
+ "tradeName": "ORELOX 100MG TABLETS",
+ "scientificName": "CEFPODOXIME",
+ "atcCode1": "J01DD14",
+ "strength": "100",
+ "price": "30.80",
+ "pharmaceuticalForm": { "nameEn": "Tablet" },
+ "marketingStatus": { "nameEn": "Marketed" },
+ "legalStatus": { "nameEn": "Prescription" },
+ "company": { "nameEn": "SANOFI WINTHROP INDUSTRIE" }
+ }
+ ],
+ "currentPage": 1,
+ "pageCount": 791,
+ "pageSize": 15,
+ "rowCount": 11856
 }
 ```
 
@@ -440,13 +440,13 @@ use Aghfatehi\SaudiFda\Exceptions\SaudiFdaException;
 use Aghfatehi\SaudiFda\Exceptions\AuthenticationException;
 
 try {
-    $products = SaudiFda::cosmetics()->list();
+ $products = SaudiFda::cosmetics()->list();
 } catch (AuthenticationException $e) {
-    // Missing or invalid credentials
-    report($e);
+ // Missing or invalid credentials
+ report($e);
 } catch (SaudiFdaException $e) {
-    // API error (network, rate limit, server error)
-    report($e);
+ // API error (network, rate limit, server error)
+ report($e);
 }
 ```
 
@@ -502,7 +502,13 @@ Complete Postman collection with all 24 SFDA API endpoints:
 - Collection variables for credentials and token
 - Response examples for every endpoint
 
-**Import:** Postman → Import → Select `SFDA-API-Postman.json`
+**How to use:**
+1. Postman → Import → Select `SFDA-API-Postman.json`
+2. Click **Environment** → **Add** (or edit an existing environment)
+3. Add these **Environment variables**:
+   - `SFDA_CONSUMER_KEY` = your consumer key
+   - `SFDA_CONSUMER_SECRET` = your consumer secret
+4. Make your first request — the token is fetched automatically
 
 ---
 
