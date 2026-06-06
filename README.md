@@ -1,30 +1,55 @@
 <!--
-  SEO: Saudi FDA, SFDA, SFDA API, SFDA Laravel, الهيئة العامة للغذاء والدواء, SFDA cosmetics API,
-  SFDA drugs API, SFDA food API, SFDA medical devices API, laravel saudi fda, SFDA integration
+  Author: AL-AGHBARI Fatehi
+  Website: https://fsoftdev.com | https://github.com/aghfatehi
+  Company: Fatehi Software Development (FSD)
+  Package: aghfatehi/laravel-saudi-fda
+  SEO: Saudi FDA API Laravel, SFDA Laravel Integration, الهيئة العامة للغذاء والدواء لارافيل
 -->
 
-# Saudi FDA API Integration for Laravel — SFDA Laravel Package
+<p align="center">
+    <a href="https://www.php.net/"><img src="https://img.shields.io/badge/php-^8.1-8892BF.svg?style=for-the-badge&logo=php" alt="PHP Version"></a>
+    <a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-9|10|11|12|13-FF2D20.svg?style=for-the-badge&logo=laravel" alt="Laravel Version"></a>
+    <a href="https://sfda.gov.sa/"><img src="https://img.shields.io/badge/SFDA-Cosmetics_%2B_Drugs_%2B_Food_%2B_Medical_Devices-00A859.svg?style=for-the-badge" alt="SFDA Services"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge" alt="License"></a>
+    <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
+    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
+    <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
+    <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FSD-Fatehi%20Software%20Development-blue.svg?style=for-the-badge" alt="FSD"></a>
+    <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
+</p>
 
-[![Latest Version](https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda)](https://packagist.org/packages/aghfatehi/laravel-saudi-fda)
-[![Total Downloads](https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda)](https://packagist.org/packages/aghfatehi/laravel-saudi-fda)
-[![License](https://img.shields.io/packagist/l/aghfatehi/laravel-saudi-fda)](https://packagist.org/packages/aghfatehi/laravel-saudi-fda)
-[![PHP Version](https://img.shields.io/packagist/php-v/aghfatehi/laravel-saudi-fda)](https://packagist.org/packages/aghfatehi/laravel-saudi-fda)
-[![Laravel Version](https://img.shields.io/badge/Laravel-9.x%20–%2013.x-blue)](https://packagist.org/packages/aghfatehi/laravel-saudi-fda)
+<h1 align="center">Saudi FDA (SFDA) API Integration for Laravel</h1>
+<h3 align="center">Laravel package for the Saudi Food and Drug Authority public APIs — Cosmetics, Drugs, Food, Medical Devices</h3>
+<h3 align="center">ربط الهيئة العامة للغذاء والدواء السعودية مع لارافيل — مستحضرات التجميل، الأدوية، المنتجات الغذائية، الأجهزة الطبية</h3>
+<h4 align="center">By <a href="https://fsoftdev.com">Fatehi Software Development (FSD)</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi</a> &mdash; <strong>فتحي الأغبري</strong></h4>
 
-Laravel package for the Saudi Food and Drug Authority (SFDA) APIs.
-
-Supports:
-- **OAuth2** authentication (client_credentials grant)
-- **Cosmetics** - search and retrieve cosmetic product data
-- **Drugs** - browse registered pharmaceutical products
-- **Food** - search and retrieve food product data
-- **Medical Devices** - browse low-risk, GHTF, and TFA devices
-
-> [Arabic documentation (التوثيق العربي)](README-ar.md)
+<p align="center">
+    <strong>SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs. دمج هيئة الغذاء والدواء السعودية مع لارافيل: المصادقة التلقائية وواجهات التجميل والأدوية والغذاء والأجهزة الطبية</strong>
+</p>
 
 ---
 
-## Requirements
+## Table of Contents
+
+- [Requirements & Installation](#requirements--installation)
+- [Configuration](#configuration)
+- [Quick Start](#quick-start)
+- [Authentication](#authentication)
+- [Cosmetics API](#cosmetics-api)
+- [Drugs API](#drugs-api)
+- [Food API](#food-api)
+- [Medical Devices API](#medical-devices-api)
+- [Built-in API Routes](#built-in-api-routes)
+- [Error Handling](#error-handling)
+- [Events](#events)
+- [Artisan Commands](#artisan-commands)
+- [Testing](#testing)
+- [Postman Collection](#postman-collection)
+- [License](#license)
+
+---
+
+## Requirements & Installation
 
 | Requirement | Version |
 |---|---|
@@ -32,17 +57,14 @@ Supports:
 | **Laravel** | `9.x` · `10.x` · `11.x` · `12.x` · `13.x` |
 | **Extensions** | `json`, `curl` |
 
-## Installation
-
 ```bash
 composer require aghfatehi/laravel-saudi-fda
 ```
 
-Laravel will auto-discover the service provider. No manual registration needed.
-
-### Publish Configuration (Optional)
+Laravel auto-discovers the service provider. No manual registration needed.
 
 ```bash
+# Publish config (optional)
 php artisan vendor:publish --tag=saudi-fda-config
 ```
 
@@ -50,207 +72,365 @@ php artisan vendor:publish --tag=saudi-fda-config
 
 ## Configuration
 
-Add these variables to your `.env` file:
+Add to `.env`:
 
 ```env
-SFDA_CONSUMER_KEY=your_consumer_key_here
-SFDA_CONSUMER_SECRET=your_consumer_secret_here
+SFDA_CONSUMER_KEY=your_consumer_key
+SFDA_CONSUMER_SECRET=your_consumer_secret
 SFDA_ENVIRONMENT=sandbox
 ```
 
-For sandbox testing, you can use the credentials configured in your application.
-
-### Available Environment Variables
-
 | Variable | Default | Description |
 |---|---|---|
-| `SFDA_CONSUMER_KEY` | — | Your SFDA Consumer Key (required) |
-| `SFDA_CONSUMER_SECRET` | — | Your SFDA Consumer Secret (required) |
+| `SFDA_CONSUMER_KEY` | — | Your SFDA Consumer Key **(required)** |
+| `SFDA_CONSUMER_SECRET` | — | Your SFDA Consumer Secret **(required)** |
 | `SFDA_ENVIRONMENT` | `sandbox` | `sandbox` or `production` |
-| `SFDA_TOKEN_CACHE_ENABLED` | `true` | Cache the access token |
+| `SFDA_TOKEN_CACHE_ENABLED` | `true` | Cache access token |
 | `SFDA_TOKEN_CACHE_STORE` | `file` | Cache store (file, redis, etc.) |
-| `SFDA_API_TIMEOUT` | `60` | Request timeout in seconds |
-| `SFDA_ROUTES_ENABLED` | `true` | Enable/disable built-in API routes |
-| `SFDA_LOG_LEVEL` | `info` | Log level (debug, info, warning, error) |
+| `SFDA_TOKEN_CACHE_KEY` | `sfda_access_token` | Cache key for token |
+| `SFDA_API_TIMEOUT` | `60` | Request timeout (seconds) |
+| `SFDA_ROUTES_ENABLED` | `true` | Enable built-in routes |
+| `SFDA_ROUTES_PREFIX` | `api/saudi-fda` | Routes prefix |
+| `SFDA_LOGGING_ENABLED` | `true` | Enable request logging |
+| `SFDA_LOG_LEVEL` | `info` | Log level |
+
+Base URLs can also be overridden per service via `SFDA_OAUTH_BASE`, `SFDA_COSMETICS_BASE`, `SFDA_DRUGS_BASE`, `SFDA_FOOD_BASE`, `SFDA_MEDICAL_DEVICES_BASE`.
 
 ---
 
 ## Quick Start
 
-### 1. Health Check
-
 ```bash
+# Health check
 php artisan saudi-fda:check
+
+# View configuration
+php artisan saudi-fda:check --config
 ```
 
-This command verifies your configuration and tests the API connection.
-
-```
-SFDA Package Health Check
-
-  Package Version ........... 1.0.0
-  Environment ............... sandbox
-  Credentials Configured ... YES
-  Testing Authentication .... DONE
-  Token ..................... sk0x2...abc12
-  Expires In ................ 86400 seconds
-```
-
-### 2. Use the Facade
+### Using the Facade
 
 ```php
 use Aghfatehi\SaudiFda\Facades\SaudiFda;
 
-// List cosmetics
-$cosmetics = SaudiFda::cosmetics()->list();
+// Check if credentials are configured
+SaudiFda::isConfigured(); // bool
 
-// Search food products
-$food = SaudiFda::food()->search('honey');
+// Check if API is ready (valid token obtained)
+SaudiFda::isReady(); // bool
 
-// Browse drugs
-$drugs = SaudiFda::drugs()->list(['page' => 1, 'limit' => 20]);
+// Get current environment
+SaudiFda::environment(); // \Aghfatehi\SaudiFda\Enums\Environment
 ```
 
-### 3. Use Dependency Injection
+### Dependency Injection
 
 ```php
 use Aghfatehi\SaudiFda\SaudiFdaClient;
 
 class ProductController extends Controller
 {
-    public function search(SaudiFdaClient $sfda, Request $request)
-    {
-        $products = $sfda->cosmetics()->byBarcode($request->barcode);
+    public function __construct(private SaudiFdaClient $sfda) {}
 
-        return response()->json($products);
+    public function search(Request $request)
+    {
+        return $this->sfda->cosmetics()->byBarcode($request->barcode);
     }
 }
 ```
 
-### 4. Use the Built-in API Routes
+---
 
-The package registers these routes under `/api/saudi-fda`:
+## Authentication
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/saudi-fda/status` | Package health status |
-| `POST` | `/api/saudi-fda/auth/token` | Get a fresh access token |
-| `GET` | `/api/saudi-fda/cosmetics` | List cosmetics |
-| `GET` | `/api/saudi-fda/cosmetics/{id}` | Cosmetics by ID |
-| `GET` | `/api/saudi-fda/cosmetics/number/{number}` | Cosmetics by registration number |
-| `GET` | `/api/saudi-fda/cosmetics/barcode/{barcode}` | Cosmetics by barcode |
-| `POST` | `/api/saudi-fda/cosmetics/search` | Search cosmetics |
-| `GET` | `/api/saudi-fda/drugs` | List drugs |
-| `GET` | `/api/saudi-fda/food` | List food products |
-| `GET` | `/api/saudi-fda/food/{id}` | Food by ID |
-| `POST` | `/api/saudi-fda/food/search` | Search food |
-| `GET` | `/api/saudi-fda/medical-devices/low-risk` | Low risk devices |
-| `GET` | `/api/saudi-fda/medical-devices/ghtf` | GHTF devices |
-| `GET` | `/api/saudi-fda/medical-devices/tfa` | TFA devices |
+The **OAuth2 Client Credentials** flow is fully automatic. The package obtains, caches, and refreshes the access token transparently.
+
+**API Endpoint:** `POST https://apis.sfda.gov.sa:9002/v2/oauth/accesstoken?grant_type=client_credentials`
+**Auth Method:** HTTP Basic (Consumer Key : Consumer Secret)
+**Token Expiry:** 24 hours (86400 seconds)
+
+```php
+// Force a new token (bypass cache)
+$token = SaudiFda::auth()->getAccessToken(true);
+
+// Get cached or new token
+$token = SaudiFda::auth()->getAccessToken();
+
+// $token is an AccessTokenDTO with:
+$token->accessToken; // string - the Bearer token
+$token->expiresIn;   // int - seconds until expiry
+
+// Check credentials validity
+SaudiFda::auth()->validateCredentials(); // bool
+```
+
+> **How auto-refresh works:** If any API call receives a 401 response, the package automatically requests a new token and retries the request once. Additionally, before every request, the package checks whether a valid token exists and obtains one if missing.
 
 ---
 
-## Detailed Usage
+## Cosmetics API
 
-### Authentication
+**Base URL:** `https://apis.sfda.gov.sa:9002/v2/cosmetics`
 
-Authentication is **automatic**. The package obtains and caches the access token for you.
+The Cosmetics API provides 7 endpoints for querying registered cosmetic products in the Saudi market.
 
-```php
-// Force a fresh token (bypass cache)
-$token = SaudiFda::auth()->getAccessToken(true);
-
-// Get cached token (or obtain new one if expired)
-$token = SaudiFda::auth()->getAccessToken();
-
-// Check if credentials are valid
-$valid = SaudiFda::auth()->validateCredentials(); // bool
-```
-
-### Cosmetics
+### 1. List Cosmetics (Paginated)
 
 ```php
-$cosmetics = SaudiFda::cosmetics();
-
-// List with optional filters
-$cosmetics->list(['page' => 1, 'limit' => 50]);
-
-// By SFDA ID
-$cosmetics->byId('12345');
-
-// By cosmetic registration number
-$cosmetics->byCosmeticNumber('123456');
-
-// By barcode
-$cosmetics->byBarcode('6281234567890');
-
-// Search by keyword
-$cosmetics->search('cream');
-
-// Get product image
-$cosmetics->getImage('12345');
+$products = SaudiFda::cosmetics()->list(['page' => 1, 'limit' => 50]);
 ```
+**SFDA Endpoint:** `GET /v2/cosmetics/list?page=1&Keyword=`
+**Query Params:** `page` (int, optional, default: 1), `Keyword` (string, optional)
+**Returns:** Paginated list of cosmetic products with `currentPage`, `pageCount`, `pageSize`, `rowCount`, and `results` array.
 
-### Drugs
+### 2. Get by Product ID
 
 ```php
-$drugs = SaudiFda::drugs();
-
-// List all registered drugs
-$drugs->list();
-
-// List with pagination
-$drugs->list(['page' => 1, 'limit' => 100]);
+$product = SaudiFda::cosmetics()->byId(1495);
 ```
+**SFDA Endpoint:** `GET /v2/cosmetics/Product_Id/{productID}`
+**Path Params:** `productID` (int, required) — SFDA product identifier
+**Returns:** Single cosmetic product with full details (brand, manufacturer, barcode, package volume, etc.)
 
-### Food
+### 3. Get by Cosmetic Number
 
 ```php
-$food = SaudiFda::food();
+$product = SaudiFda::cosmetics()->byCosmeticNumber('CN-2023-08203');
+```
+**SFDA Endpoint:** `GET /v2/cosmetics/cosmeticNumber/{cosmeticNumber}`
+**Path Params:** `cosmeticNumber` (string, required) — Cosmetic registration number
 
-// List food products
-$food->list(['page' => 1, 'limit' => 50]);
+### 4. Get by Barcode
 
-// By SFDA ID
-$food->byId('12345');
+```php
+$product = SaudiFda::cosmetics()->byBarcode('6281007990215');
+```
+**SFDA Endpoint:** `GET /v2/cosmetics/BarCode/{barcode}`
+**Path Params:** `barcode` (string, required) — Product barcode
 
-// By reference number
-$food->byReferenceNumber('123456');
+### 5. Advanced Search
 
-// By barcode
-$food->byBarcode('6281234567890');
+```php
+$results = SaudiFda::cosmetics()->search([
+    'BrandName' => 'AVON',
+    'SpecificName' => '',
+    'SpecificNameAr' => '',
+    'barCode' => '',
+    'CosmeticNumber' => '',
+    'page' => 1,
+]);
+```
+**SFDA Endpoint:** `GET /v2/cosmetics/search`
+**Query Params:** `SpecificNameAr`, `SpecificName`, `BrandName`, `barCode`, `CosmeticNumber`, `page` (all optional)
 
-// Search by keyword
-$food->search('olive oil');
+### 6. Search by Keyword
 
-// Get product image
-$food->getImage('12345');
+```php
+$results = SaudiFda::cosmetics()->searchByKeyword('AVON', 1);
+```
+**SFDA Endpoint:** `GET /v2/cosmetics/search/{keyword}/{page}`
+**Path Params:** `keyword` (string, required), `page` (int, required)
+
+### 7. Get Product Image
+
+```php
+$image = SaudiFda::cosmetics()->getImage('IMG-2023-12345');
+```
+**SFDA Endpoint:** `GET /v2/cosmetics/image/{image_code}`
+**Path Params:** `image_code` (string, required) — Image name/code
+
+---
+
+## Drugs API
+
+**Base URL:** `https://apis.sfda.gov.sa:9002/v2/DMS`
+
+### 1. List Drugs (Paginated)
+
+```php
+$drugs = SaudiFda::drugs()->list(['page' => 1, 'limit' => 100]);
+```
+**SFDA Endpoint:** `GET /v2/DMS/drug/list?page=1`
+**Query Params:** `page` (int, optional, default: 1)
+
+**Sample Response:**
+```json
+{
+    "data": [
+        {
+            "registerNumber": "21-37-10",
+            "tradeName": "ORELOX 100MG TABLETS",
+            "scientificName": "CEFPODOXIME",
+            "atcCode1": "J01DD14",
+            "strength": "100",
+            "price": "30.80",
+            "pharmaceuticalForm": { "nameEn": "Tablet" },
+            "marketingStatus": { "nameEn": "Marketed" },
+            "legalStatus": { "nameEn": "Prescription" },
+            "company": { "nameEn": "SANOFI WINTHROP INDUSTRIE" }
+        }
+    ],
+    "currentPage": 1,
+    "pageCount": 791,
+    "pageSize": 15,
+    "rowCount": 11856
+}
 ```
 
-### Medical Devices
+---
+
+## Food API
+
+**Base URL:** `https://apis.sfda.gov.sa:9002/v2/Food`
+
+### 1. List Food Products (Paginated)
+
+```php
+$products = SaudiFda::food()->list(['page' => 1, 'limit' => 50]);
+```
+**SFDA Endpoint:** `GET /v2/Food/product/list/{page}`
+**Path Params:** `page` (int, required)
+
+### 2. Get by ID
+
+```php
+$product = SaudiFda::food()->byId(1449070);
+```
+**SFDA Endpoint:** `GET /v2/Food/product/id/{id}`
+**Path Params:** `id` (int, required)
+
+### 3. Get by Reference Number
+
+```php
+$product = SaudiFda::food()->byReferenceNumber('P-3-N-200621-107719');
+```
+**SFDA Endpoint:** `GET /v2/Food/product/referencenumber/{referenceNumber}`
+**Path Params:** `referenceNumber` (string, required)
+
+### 4. Get by Barcode
+
+```php
+$product = SaudiFda::food()->byBarcode('50254156');
+```
+**SFDA Endpoint:** `GET /v2/Food/product/barcode/{barcode}`
+**Path Params:** `barcode` (string, required)
+
+### 5. Search by Keyword
+
+```php
+$results = SaudiFda::food()->search('chocolate', 1);
+```
+**SFDA Endpoint:** `GET /v2/Food/product/search/{keyword}/{page}`
+**Path Params:** `keyword` (string, required), `page` (int, required)
+
+### 6. Get Product Image
+
+```php
+$image = SaudiFda::food()->getImage('FOOD-IMG-12345');
+```
+**SFDA Endpoint:** `GET /v2/Food/image/{image_code}`
+**Path Params:** `image_code` (string, required)
+
+---
+
+## Medical Devices API
+
+**Base URL:** `https://apis.sfda.gov.sa:9002/v2/dwh-md`
+
+The Medical Devices API is organized into 3 categories: **Low Risk**, **GHTF** (Global Harmonization Task Force), and **TFA** (Traditional Foreign Approval).
+
+### Low Risk Devices (3 endpoints)
 
 ```php
 $devices = SaudiFda::medicalDevices();
 
-// Low-risk medical devices (Class A, B)
-$devices->lowRiskList(['page' => 1, 'limit' => 50]);
+// List (paginated)
+$devices->lowRiskList(['page' => 1]);
+// SFDA: GET /v2/dwh-md/Lowrisk/list/{page}
 
-// GHTF-classified devices
-$devices->ghtfList(['page' => 1, 'limit' => 50]);
+// Get by filters (LowRiskID, productID, AccountNumber, RegistrationNumber, CrNumber)
+$devices->lowRiskById(123);
+// SFDA: GET /v2/dwh-md/Lowrisk/Product?LowRiskID=123
 
-// TFA-classified devices (Traditional)
-$devices->tfaList(['page' => 1, 'limit' => 50]);
-
-// By ID
-$devices->lowRiskById('12345');
-$devices->ghtfById('12345');
-$devices->tfaById('12345');
-
-// By license number
+// Get by license number
 $devices->lowRiskByLicenseNumber('LIC-123');
-$devices->ghtfByLicenseNumber('LIC-456');
-$devices->tfaByLicenseNumber('LIC-789');
+// SFDA: GET /v2/dwh-md/Lowrisk/Product?RegistrationNumber=LIC-123
+
+// Search by keyword
+$devices->lowRiskSearch('face mask', 1);
+// SFDA: GET /v2/dwh-md/Lowrisk/search/{keyword}/{page}
 ```
+
+### GHTF Devices (4 endpoints)
+
+```php
+// List (paginated)
+$devices->ghtfList(['page' => 1]);
+// SFDA: GET /v2/dwh-md/GHTF/list/{page}
+
+// Get by filters (PropertiesId, MDId, ReferenceNumber, AccountNumber, DeviceNumber, CrNumber)
+$devices->ghtfById(456);
+// SFDA: GET /v2/dwh-md/GHTF/Product?PropertiesId=456
+
+// Get by license number
+$devices->ghtfByLicenseNumber('LIC-456');
+// SFDA: GET /v2/dwh-md/GHTF/Product?DeviceNumber=LIC-456
+
+// Get accessory
+$devices->ghtfAccessory(11);
+// SFDA: GET /v2/dwh-md/GHTF/Accessory/id/{PropertiesId}
+
+// Search by keyword
+$devices->ghtfSearch('hospital bed', 1);
+// SFDA: GET /v2/dwh-md/GHTF/search/{keyword}/{page}
+```
+
+### TFA Devices (3 endpoints)
+
+```php
+// List (paginated)
+$devices->tfaList(['page' => 1]);
+// SFDA: GET /v2/dwh-md/TFA/list/{page}
+
+// Get by ID
+$devices->tfaById(789);
+// SFDA: GET /v2/dwh-md/TFA/Product?PropertiesId=789
+
+// Get by license number
+$devices->tfaByLicenseNumber('LIC-789');
+// SFDA: GET /v2/dwh-md/TFA/Product?DeviceNumber=LIC-789
+
+// Get accessory
+$devices->tfaAccessory(11);
+// SFDA: GET /v2/dwh-md/TFA/Accessory/id/{PropertiesId}
+
+// Search by keyword
+$devices->tfaSearch('ultrasound', 1);
+// SFDA: GET /v2/dwh-md/TFA/search/{keyword}/{page}
+```
+
+---
+
+## Built-in API Routes
+
+The package registers these routes under `/api/saudi-fda` (configurable):
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/saudi-fda/status` | Package health status |
+| `POST` | `/api/saudi-fda/auth/token` | Get fresh access token |
+| `GET` | `/api/saudi-fda/cosmetics` | List cosmetics (query: `page`, `Keyword`) |
+| `GET` | `/api/saudi-fda/cosmetics/{id}` | Get cosmetic by Product ID |
+| `GET` | `/api/saudi-fda/cosmetics/number/{cosmeticNumber}` | Get by registration number |
+| `GET` | `/api/saudi-fda/cosmetics/barcode/{barcode}` | Get by barcode |
+| `POST` | `/api/saudi-fda/cosmetics/search` | Search cosmetics (body: `keyword`) |
+| `GET` | `/api/saudi-fda/drugs` | List drugs (query: `page`) |
+| `GET` | `/api/saudi-fda/food` | List food products |
+| `GET` | `/api/saudi-fda/food/{id}` | Get food by ID |
+| `POST` | `/api/saudi-fda/food/search` | Search food (body: `keyword`) |
+| `GET` | `/api/saudi-fda/medical-devices/low-risk` | List Low Risk devices |
+| `GET` | `/api/saudi-fda/medical-devices/ghtf` | List GHTF devices |
+| `GET` | `/api/saudi-fda/medical-devices/tfa` | List TFA devices |
 
 ---
 
@@ -263,14 +443,11 @@ use Aghfatehi\SaudiFda\Exceptions\AuthenticationException;
 try {
     $products = SaudiFda::cosmetics()->list();
 } catch (AuthenticationException $e) {
-    // Invalid or expired credentials
-    Log::error('SFDA auth failed', ['message' => $e->getMessage()]);
+    // Missing or invalid credentials
+    report($e);
 } catch (SaudiFdaException $e) {
-    // API error (rate limit, network, etc.)
-    Log::error('SFDA API error', [
-        'message' => $e->getMessage(),
-        'code' => $e->getCode(),
-    ]);
+    // API error (network, rate limit, server error)
+    report($e);
 }
 ```
 
@@ -278,43 +455,60 @@ try {
 
 ## Events
 
-The package fires these events that you can listen to:
-
 | Event | Fired When | Payload |
 |---|---|---|
-| `SaudiFdaAuthenticationSucceeded` | Token obtained successfully | `AccessTokenDTO` |
-| `SaudiFdaAuthenticationFailed` | Token request failed | Exception message |
-| `SaudiFdaRequestFailed` | Any API request fails | Endpoint + response data |
+| `ApiRequestSucceeded` | Any API request succeeds | Endpoint + duration |
+| `ApiRequestFailed` | Any API request fails | Endpoint + response data |
+
+---
+
+## Artisan Commands
+
+```bash
+# Full health check — verifies config + authentication + API connectivity
+php artisan saudi-fda:check
+
+# Test authentication only
+php artisan saudi-fda:check --auth
+
+# View current configuration (masked credentials)
+php artisan saudi-fda:check --config
+```
 
 ---
 
 ## Testing
 
 ```bash
-php artisan saudi-fda:check
+vendor/bin/phpunit
 ```
+
+The package includes PHPUnit tests for:
+- Facade resolution
+- Singleton service instances
+- Configuration checks
+- Authentication errors
+
+**CI:** GitHub Actions runs tests across PHP 8.1–8.4 × Laravel 9–13 (26 matrix combinations).
 
 ---
 
 ## Postman Collection
 
-A complete Postman collection is included:
-
 **[SFDA-API-Postman.json](SFDA-API-Postman.json)**
 
-Contains all 22 endpoints with:
-- Auto-authentication via pre-request script
-- Response examples for every request
-- Reusable collection variables
-- Token expiry handling
+Complete Postman collection with all 24 SFDA API endpoints:
+- Pre-request script auto-authenticates before every request
+- Test scripts validate responses and handle 401 expiry
+- Collection variables for credentials and token
+- Response examples for every endpoint
 
-**How to use:**
-1. Open Postman → Import → Select the JSON file
-2. Update `consumer_key` and `consumer_secret` in the collection variables
-3. Make your first request — the token is fetched automatically
+**Import:** Postman → Import → Select `SFDA-API-Postman.json`
 
 ---
 
 ## License
 
-MIT
+MIT — Created by [AL-AGHBARI Fatehi](https://github.com/aghfatehi) — [Fatehi Software Development (FSD)](https://fsoftdev.com)
+
+**Keywords:** SFDA, Saudi FDA, SFDA API, Laravel SFDA, الهيئة العامة للغذاء والدواء, SFDA Laravel package, SFDA cosmetics API, SFDA drugs API, SFDA food API, SFDA medical devices API, Saudi Arabia API integration, SFDA OAuth2, مستحضرات التجميل هيئة الغذاء والدواء, الأدوية هيئة الغذاء والدواء, المنتجات الغذائية هيئة الغذاء والدواء, الأجهزة الطبية هيئة الغذاء والدواء, SFDA API PHP, SFDA integration Laravel 9, Laravel 10, Laravel 11, Laravel 12, Laravel 13
