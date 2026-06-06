@@ -1,6 +1,6 @@
 <?php
 
-namespace Aghfatehi\SaudiFda\Tests;
+namespace Aghfatehi\SaudiFda\Tests\Unit;
 
 use Aghfatehi\SaudiFda\Facades\SaudiFda;
 use Aghfatehi\SaudiFda\SaudiFdaClient;
