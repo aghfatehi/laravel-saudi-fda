@@ -49,6 +49,8 @@
 
 ---
 
+> **Important:** The SFDA API restricts access to Saudi IP addresses only. If your server is outside Saudi Arabia, you must contact SFDA support to add your server IP to their allowed list, or use a Saudi-based server/VPN. Without this, all connection attempts will time out on port 9002.
+
 ## Requirements & Installation
 
 | Requirement | Version |
