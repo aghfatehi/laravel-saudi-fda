@@ -1,6 +1,6 @@
 <!--
   المؤلف: AL-AGHBARI Fatehi (الغباري فتحي)
-  الشركة: Fatehi Software Development (FSD) - fsoftdev.com
+  الشركة: FsoftDev.com
   الموقع: https://fsoftdev.com | https://github.com/aghfatehi
   الحزمة: aghfatehi/laravel-saudi-fda
   SEO: ربط الهيئة العامة للغذاء والدواء مع لارافيل, SFDA Laravel, SFDA API
@@ -14,14 +14,14 @@
     <a href="https://github.com/aghfatehi/laravel-saudi-fda/actions"><img src="https://img.shields.io/github/actions/workflow/status/aghfatehi/laravel-saudi-fda/laravel.yml?style=for-the-badge&label=Tests" alt="Tests"></a>
     <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/v/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Packagist"></a>
     <a href="https://packagist.org/packages/aghfatehi/laravel-saudi-fda"><img src="https://img.shields.io/packagist/dt/aghfatehi/laravel-saudi-fda.svg?style=for-the-badge" alt="Downloads"></a>
-    <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FSD-Fatehi%20Software%20Development-blue.svg?style=for-the-badge" alt="FSD"></a>
+    <a href="https://fsoftdev.com"><img src="https://img.shields.io/badge/FsoftDev-FsoftDev.com-blue.svg?style=for-the-badge" alt="FsoftDev"></a>
     <a href="https://github.com/aghfatehi"><img src="https://img.shields.io/badge/Author-AL--AGHBARI%20Fatehi-blue.svg?style=for-the-badge" alt="Author"></a>
 </p>
 
 <h1 align="center">ربط الهيئة العامة للغذاء والدواء السعودية (SFDA) مع Laravel</h1>
 <h3 align="center">دمج واجهات هيئة الغذاء والدواء العامة مع لارافيل — مستحضرات التجميل، الأدوية، المنتجات الغذائية، الأجهزة الطبية</h3>
 <h3 align="center">Laravel package for the Saudi Food and Drug Authority public APIs — Cosmetics, Drugs, Food, Medical Devices</h3>
-<h4 align="center">من <a href="https://fsoftdev.com">Fatehi Software Development (FSD)</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi (الغباري فتحي)</a></h4>
+<h4 align="center">من <a href="https://fsoftdev.com">FsoftDev.com</a> &mdash; <a href="https://github.com/aghfatehi">AL-AGHBARI Fatehi (الغباري فتحي)</a></h4>
 
 <p align="center">
     <strong>حزمة لربط هيئة الغذاء والدواء السعودية مع لارافيل: مصادقة تلقائية OAuth2، واجهات التجميل والأدوية والغذاء والأجهزة الطبية. SFDA integration for Laravel — automatic OAuth2 authentication, cosmetics & drug & food & medical device APIs</strong>
@@ -364,6 +364,6 @@ php artisan saudi-fda:check --config
 
 ## الترخيص
 
-MIT — من إنشاء [AL-AGHBARI Fatehi (الغباري فتحي)](https://github.com/aghfatehi) — [Fatehi Software Development (FSD)](https://fsoftdev.com)
+MIT — من إنشاء [AL-AGHBARI Fatehi (الغباري فتحي)](https://github.com/aghfatehi) — [FsoftDev.com](https://fsoftdev.com)
 
 **كلمات مفتاحية:** هيئة الغذاء والدواء السعودية, SFDA, SFDA API Laravel, الهيئة العامة للغذاء والدواء, ربط SFDA مع Laravel, SFDA cosmetics, SFDA drugs, SFDA food, SFDA medical devices, API هيئة الغذاء والدواء, الغباري فتحي, AL-AGHBARI Fatehi, لارافيل 9, لارافيل 10, لارافيل 11, لارافيل 12, لارافيل 13
