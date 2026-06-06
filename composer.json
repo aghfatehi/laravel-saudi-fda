@@ -1,6 +1,6 @@
 {
     "name": "aghfatehi/laravel-saudi-fda",
-    "description": "🚀 Laravel package for Saudi Food and Drug Authority (SFDA) API integration. SDK for Cosmetics, Drugs, Food & Medical Devices with OAuth2 auto-auth. ربط الهيئة العامة للغذاء والدواء السعودية مع لارافيل - دعم مستحضرات التجميل، الأدوية، المنتجات الغذائية، والأجهزة الطبية",
+    "description": "Laravel package for Saudi Food and Drug Authority (SFDA) API integration. SDK for Cosmetics, Drugs, Food & Medical Devices with OAuth2 auto-auth. ربط الهيئة العامة للغذاء والدواء السعودية مع لارافيل - دعم مستحضرات التجميل، الأدوية، المنتجات الغذائية، والأجهزة الطبية",
     "type": "library",
     "license": "MIT",
     "keywords": [
